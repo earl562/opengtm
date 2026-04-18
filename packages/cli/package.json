@@ -5,11 +5,18 @@
   "bin": {
     "opengtm": "./bin/opengtm.js"
   },
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
+  "files": [
+    "dist/**",
+    "bin/**"
+  ],
   "dependencies": {
     "@opengtm/types": "file:../types",
     "@opengtm/core": "file:../core",
@@ -18,6 +25,7 @@
     "@opengtm/daemon": "file:../daemon"
   },
   "scripts": {
+    "build": "tsup",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   }
