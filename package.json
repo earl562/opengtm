@@ -45,7 +45,7 @@
     "@stryker-mutator/core": "^9.6.0",
     "@changesets/cli": "^2.27.1",
     "tsup": "^8.0.0",
-    "typescript": "^5.7.0",
+    "typescript": "^6.0.3",
     "vitest": "^2.0.0"
   },
   "engines": {
