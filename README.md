@@ -24,6 +24,7 @@ See `docs/demo.md`.
 - Security: `docs/security.md`
 - Discord: `docs/discord.md`
 - Release: `docs/release.md`
+- CRM MVP spec (clean-room): `docs/crm-mvp-spec.md`
 
 ## CLI
 This repository will publish an npm CLI named **`opengtm`**.
