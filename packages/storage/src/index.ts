@@ -8,5 +8,6 @@ export * from './artifact.js'
 export * from './secrets.js'
 
 export { createStorage } from './store.js'
-export { upsertRecord, getRecord, listRecords, validateStorage } from './store.js'
+export { upsertRecord, getRecord, listRecords, validateStorage, deleteRecord, deleteRecordsAfter } from './store.js'
 export { queryMemoryRecords } from './memory.js'
+export * from './lifecycle.js'
