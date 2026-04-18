@@ -1,6 +1,6 @@
 import type { OpenGtmLocalDaemon } from '@opengtm/daemon'
 import { createRunTrace } from '@opengtm/core'
-import { createPolicyDecisionFromAction, createApprovalRequestForDecision } from '@opengtm/policy'
+import { createPolicyDecisionFromActionWithConfig, createApprovalRequestForDecision, loadPolicyConfig } from '@opengtm/policy'
 
 export async function handleBuildRun(args: {
   daemon: OpenGtmLocalDaemon
@@ -21,12 +21,13 @@ export async function handleBuildRun(args: {
     goal: args.goal
   })
 
-  const decision = createPolicyDecisionFromAction({
+  const policyConfig = await loadPolicyConfig({ cwd: process.cwd() })
+  const decision = createPolicyDecisionFromActionWithConfig({
     workItemId: workItem.id,
     lane: 'build-integrate',
     actionType: 'write-repo',
     target: args.goal
-  })
+  }, policyConfig)
 
   const approval = createApprovalRequestForDecision({
     workspaceId,
