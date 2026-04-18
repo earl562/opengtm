@@ -11,9 +11,13 @@ OpenGTM is an externalization-driven **agentic harness** for **GTM engineers** a
 ## Quickstart (dev)
 ```bash
 npm ci
+npm -w @opengtm/cli run build
 npm run typecheck
 npm test
 ```
+
+## Demo
+See `docs/demo.md`.
 
 ## CLI
 This repository will publish an npm CLI named **`opengtm`**.
