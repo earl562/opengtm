@@ -1,4 +1,3 @@
-import { createWorkspace, createInitiative } from '@opengtm/core'
 import { saveOpenGtmConfig, type OpenGtmConfig } from '../config.js'
 import type { OpenGtmLocalDaemon } from '@opengtm/daemon'
 
