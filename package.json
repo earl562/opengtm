@@ -3,6 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "description": "Externalization-driven agentic harness for GTM and product engineers",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/earl562/opengtm.git"
+  },
+  "homepage": "https://github.com/earl562/opengtm",
+  "bugs": {
+    "url": "https://github.com/earl562/opengtm/issues"
+  },
+  "license": "MIT",
   "packageManager": "npm@11.3.0",
   "workspaces": [
     "packages/*",
@@ -14,9 +24,10 @@
     "test:mutation": "npx stryker run",
     "test:mutation:ci": "npx stryker run --reporter=junit --reporter-outfile=.artifacts/unit/junit.xml",
     "typecheck": "tsc --noEmit",
-    "lint": "echo 'Lint not configured yet'",
-    "build": "tsup",
-    "build:clean": "rm -rf packages/*/dist"
+    "lint": "echo 'Lint not configured yet' && exit 0",
+    "build": "npm --workspaces --if-present run build",
+    "build:clean": "rm -rf packages/*/dist",
+    "release": "echo 'Release not configured yet' && exit 1"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
