@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+.tsup/
+.stryker-tmp/
+.stryker-reports/
+
+# Test outputs
+coverage/
+.nyc_output/
+artifacts/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OpenGTM state
+.opengtm/
+*.db
+*.db-journal
+
+# Package links
+packages/*/node_modules/
+packages/*/dist/
+test/node_modules/
+test/dist/

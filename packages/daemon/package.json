@@ -1,0 +1,22 @@
+{
+  "name": "@opengtm/daemon",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@opengtm/types": "file:../types",
+    "@opengtm/core": "file:../core",
+    "@opengtm/storage": "file:../storage",
+    "@opengtm/policy": "file:../policy",
+    "@opengtm/connectors": "file:../connectors",
+    "@opengtm/executors": "file:../executors"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  }
+}

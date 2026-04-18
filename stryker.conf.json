@@ -1,0 +1,42 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/stryker/schema/strykerd.json",
+  "mutate": [
+    "packages/types/src/**/*.ts",
+    "packages/core/src/**/*.ts",
+    "packages/storage/src/**/*.ts",
+    "packages/policy/src/**/*.ts",
+    "packages/skills/src/**/*.ts",
+    "packages/connectors/src/**/*.ts",
+    "packages/executors/src/**/*.ts",
+    "packages/daemon/src/**/*.ts",
+    "packages/evals/src/**/*.ts",
+    "packages/cli/src/**/*.ts"
+  ],
+  "mutator": {
+    "name": "typescript",
+    "excludedMutations": [
+      "stringLiteral",
+      "optionalChaining",
+      "logicalAnd"
+    ]
+  },
+  "thresholds": {
+    "high": 80,
+    "low": 70,
+    "break": 75
+  },
+  "testRunner": "vitest",
+  "tempDirName": ".stryker-tmp",
+  "cleanTempDir": "always",
+  "reporters": [
+    "progress",
+    "clear-text",
+    "html",
+    "dashboard"
+  ],
+  "htmlReporter": {
+    "baseDir": ".stryker-reports/html"
+  },
+  "timeout": 180000,
+  "dangerouslyDisableAndroid": false
+}

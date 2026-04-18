@@ -1,0 +1,33 @@
+import { createWorkspace, createInitiative } from '@opengtm/core'
+import { saveOpenGtmConfig, type OpenGtmConfig } from '../config.js'
+import type { OpenGtmLocalDaemon } from '@opengtm/daemon'
+
+export async function handleInit(args: {
+  cwd: string
+  name: string
+  initiative?: string
+  daemon: OpenGtmLocalDaemon
+}) {
+  const ws = args.daemon.createWorkspace({ name: args.name })
+  const init = args.daemon.createInitiative({
+    workspaceId: ws.id,
+    title: args.initiative || 'Default Initiative'
+  })
+
+  const config: OpenGtmConfig = {
+    runtimeDir: '.opengtm/runtime',
+    workspaceId: ws.id,
+    initiativeId: init.id,
+    workspaceName: ws.name,
+    initiativeTitle: init.title,
+    workspaceRoot: args.cwd
+  }
+
+  await saveOpenGtmConfig(args.cwd, config)
+
+  return {
+    workspace: ws,
+    initiative: init,
+    config
+  }
+}
