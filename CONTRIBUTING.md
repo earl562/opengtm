@@ -34,3 +34,11 @@ We require:
 - typecheck
 - tests
 - build
+
+## Branch Protection
+The `main` branch is intended to be protected:
+- PRs required (no direct pushes)
+- CI checks must pass
+- No force-pushes
+
+Maintainers: update branch protection rules in GitHub Settings → Branches.
