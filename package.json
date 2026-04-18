@@ -36,11 +36,14 @@
     "lint": "echo 'Lint not configured yet' && exit 0",
     "build": "npm --workspaces --if-present run build",
     "build:clean": "rm -rf packages/*/dist",
-    "release": "echo 'Release not configured yet' && exit 1"
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "changeset publish"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@stryker-mutator/core": "^9.6.0",
+    "@changesets/cli": "^2.27.1",
     "tsup": "^8.0.0",
     "typescript": "^5.7.0",
     "vitest": "^2.0.0"
