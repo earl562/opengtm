@@ -12,6 +12,15 @@
   "bugs": {
     "url": "https://github.com/earl562/opengtm/issues"
   },
+  "keywords": [
+    "agentic",
+    "gtm",
+    "product-engineering",
+    "harness",
+    "externalization",
+    "workflow",
+    "ai"
+  ],
   "license": "MIT",
   "packageManager": "npm@11.3.0",
   "workspaces": [

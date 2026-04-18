@@ -18,6 +18,8 @@ npm test
 ## CLI
 This repository will publish an npm CLI named **`opengtm`**.
 
+> Note: there is an unrelated Python project also branded "OpenGTM". This repo is a Node/TypeScript harness and is not affiliated.
+
 ## Community
 - Questions: GitHub Discussions
 - Security: see `SECURITY.md`
