@@ -5,6 +5,8 @@ import { handleResearchRun } from './handlers/research.js'
 import { handleBuildRun } from './handlers/build.js'
 import { handleApprovals } from './handlers/approvals.js'
 import { handleDaemonStatus } from './handlers/daemon.js'
+import { handleTraces } from './handlers/traces.js'
+import { handleArtifacts } from './handlers/artifacts.js'
 import { createLocalDaemon } from '@opengtm/daemon'
 import path from 'node:path'
 
@@ -57,6 +59,14 @@ export function createCliRouter() {
 
     if (parsed.command === 'approvals') {
       return handleApprovals({ daemon })
+    }
+
+    if (parsed.command === 'traces' && parsed.subcommand === 'list') {
+      return handleTraces({ daemon })
+    }
+
+    if (parsed.command === 'artifacts' && parsed.subcommand === 'list') {
+      return handleArtifacts({ daemon })
     }
 
     return { error: `Unknown command: ${parsed.command}` }
