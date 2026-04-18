@@ -15,3 +15,22 @@ export function createSecretDescriptor({ provider, scope = 'workspace', secretKe
     secretKeys
   }
 }
+
+export interface OpenGtmSecretBackend {
+  kind: string
+  get(key: string): Promise<string | null>
+  set(key: string, value: string): Promise<void>
+}
+
+export function createEnvSecretBackend({ prefix = 'OPENGTM_' }: { prefix?: string } = {}): OpenGtmSecretBackend {
+  return {
+    kind: 'env',
+    async get(key: string) {
+      return process.env[`${prefix}${key}`] || null
+    },
+    async set(_key: string, _value: string) {
+      // Intentionally no-op: environment is read-only at runtime.
+      throw new Error('Env secret backend is read-only')
+    }
+  }
+}
