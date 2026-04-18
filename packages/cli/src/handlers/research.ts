@@ -1,5 +1,5 @@
 import type { OpenGtmLocalDaemon } from '@opengtm/daemon'
-import { createRunTrace, updateRunTrace, createArtifactRecord } from '@opengtm/core'
+import { createRunTrace, updateRunTrace, createArtifactRecord, createMemoryRecord } from '@opengtm/core'
 import { buildDefaultConnectorBundle, executeConnectorAction } from '@opengtm/connectors'
 
 export async function handleResearchRun(args: {
@@ -45,7 +45,11 @@ export async function handleResearchRun(args: {
     initiativeId: workItem.initiativeId,
     kind: 'analysis',
     lane: 'research',
-    title: `Research output: ${args.goal}`
+    title: `Research output: ${args.goal}`,
+    provenance: [
+      'opengtm:research-run',
+      `connector:${connectorResult.provider}`
+    ]
   })
 
   const { writeArtifactBlob, upsertRecord } = await import('@opengtm/storage')
@@ -62,9 +66,19 @@ export async function handleResearchRun(args: {
     sourceIds: []
   }
 
+  const memoryRecord = createMemoryRecord({
+    workspaceId,
+    memoryType: 'working',
+    scope: `initiative:${workItem.initiativeId}`,
+    contentRef: filePath,
+    sourceIds: [],
+    retrievalHints: [args.goal]
+  })
+
   upsertRecord(args.daemon.storage as any, 'work_items', workItem as any)
   upsertRecord(args.daemon.storage as any, 'run_traces', trace as any)
   upsertRecord(args.daemon.storage as any, 'artifacts', storedArtifact as any)
+  upsertRecord(args.daemon.storage as any, 'memory_records', memoryRecord as any)
 
   const completedTrace = updateRunTrace(trace, {
     status: 'completed',

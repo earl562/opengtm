@@ -8,6 +8,8 @@ export * from './handlers/approvals.js'
 export * from './handlers/daemon.js'
 export * from './handlers/traces.js'
 export * from './handlers/artifacts.js'
+export * from './handlers/memory.js'
+export * from './handlers/connectors.js'
 
 export async function runOpenGtmCli(args: string[]) {
   const router = await import('./router.js').then((m) => m.createCliRouter())
