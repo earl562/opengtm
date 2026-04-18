@@ -1,0 +1,40 @@
+name: Mutation Tests
+
+on:
+  schedule:
+    - cron: '0 7 * * 2' # Tuesdays 07:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mutation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Mutation tests (Stryker)
+        run: npm run test:mutation
+
+      - name: Upload Stryker artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stryker-artifacts
+          path: |
+            .stryker-tmp/**
+            .stryker-reports/**
+          retention-days: 7
