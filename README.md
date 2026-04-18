@@ -19,6 +19,12 @@ npm test
 ## Demo
 See `docs/demo.md`.
 
+## Docs
+- Architecture: `docs/architecture.md`
+- Security: `docs/security.md`
+- Discord: `docs/discord.md`
+- Release: `docs/release.md`
+
 ## CLI
 This repository will publish an npm CLI named **`opengtm`**.
 
