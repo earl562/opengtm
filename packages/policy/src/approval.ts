@@ -17,7 +17,7 @@ export function createPolicyDecisionFromAction({
   target?: string
 }): OpenGtmPolicyDecision {
   const riskLevel = classifyRiskLevel({ lane, actionType, connectorFamily })
-  const approvalRequired = requiresExplicitApproval(lane as any, actionType as any)
+  const approvalRequired = requiresExplicitApproval(actionType as any, lane as any)
 
   return createPolicyDecision({
     workItemId,
