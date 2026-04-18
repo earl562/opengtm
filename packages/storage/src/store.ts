@@ -72,6 +72,19 @@ export function listRecords<T = OpenGtmStorageRecord>(store: OpenGtmStorage, tab
     .map((row) => JSON.parse(row.payload as string) as T)
 }
 
+export function deleteRecord(store: OpenGtmStorage, table: OpenGtmStorageTable, id: string): void {
+  assertKnownTable(table)
+  const stmt = store.db.prepare(`DELETE FROM ${table} WHERE id = ?`)
+  stmt.run(id)
+}
+
+export function deleteRecordsAfter(store: OpenGtmStorage, table: OpenGtmStorageTable, afterIso: string): number {
+  assertKnownTable(table)
+  const stmt = store.db.prepare(`DELETE FROM ${table} WHERE created_at > ?`)
+  const result = stmt.run(afterIso) as unknown as { changes: number }
+  return (result as any).changes || 0
+}
+
 export function validateStorage(store: OpenGtmStorage) {
   const rows = store.db.prepare("SELECT name FROM sqlite_master WHERE type = 'table'").all() as Array<{ name: string }>
   const present = new Set(rows.map((row) => row.name))
