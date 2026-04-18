@@ -4,6 +4,7 @@ export async function handleResearchRun(args: {
   daemon: OpenGtmLocalDaemon
   goal: string
   workspaceId?: string
+  initiativeId?: string
 }) {
   const workspaceId = args.workspaceId || args.daemon.workspace?.id
   if (!workspaceId) {
@@ -12,7 +13,7 @@ export async function handleResearchRun(args: {
 
   const workItem = args.daemon.createWorkItem({
     workspaceId,
-    initiativeId: '',
+    initiativeId: args.initiativeId || 'unknown',
     ownerLane: 'research',
     title: `Research: ${args.goal}`,
     goal: args.goal

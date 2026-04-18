@@ -4,6 +4,7 @@ export async function handleBuildRun(args: {
   daemon: OpenGtmLocalDaemon
   goal: string
   workspaceId?: string
+  initiativeId?: string
 }) {
   const workspaceId = args.workspaceId || args.daemon.workspace?.id
   if (!workspaceId) {
@@ -12,7 +13,7 @@ export async function handleBuildRun(args: {
 
   const workItem = args.daemon.createWorkItem({
     workspaceId,
-    initiativeId: '',
+    initiativeId: args.initiativeId || 'unknown',
     ownerLane: 'build-integrate',
     title: `Build: ${args.goal}`,
     goal: args.goal

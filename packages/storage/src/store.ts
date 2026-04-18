@@ -1,9 +1,14 @@
-import { DatabaseSync } from 'node:sqlite'
+import { createRequire } from 'node:module'
 import { mkdirSync } from 'node:fs'
 import { createStoragePaths } from './paths.js'
 import { migrateStorage } from './migrate.js'
 import { OPEN_GTM_STORAGE_SCHEMA_VERSION, type OpenGtmStorageTable } from './constants.js'
 import type { OpenGtmStorage, OpenGtmStorageRecord, OpenGtmRecordQuery } from './types.js'
+
+const require = createRequire(import.meta.url)
+const SQLITE_MODULE = 'node:sqlite'
+// Keep as runtime require to avoid bundler rewriting `node:sqlite` → `sqlite`.
+const { DatabaseSync } = require(SQLITE_MODULE) as typeof import('node:sqlite')
 
 export function createStorage({ rootDir }: { rootDir: string }): OpenGtmStorage {
   const paths = createStoragePaths(rootDir)
