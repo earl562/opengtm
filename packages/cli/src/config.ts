@@ -1,5 +1,6 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises'
 import path from 'node:path'
+import type { OpenGtmAutonomyMode } from './autonomy.js'
 
 export interface OpenGtmConfig {
   runtimeDir: string
@@ -8,6 +9,7 @@ export interface OpenGtmConfig {
   workspaceName: string
   initiativeTitle: string
   workspaceRoot: string
+  autonomyMode?: OpenGtmAutonomyMode
 }
 
 export const DEFAULT_RUNTIME_DIR = '.opengtm/runtime'

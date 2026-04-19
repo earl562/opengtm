@@ -1,0 +1,9 @@
+{
+  "runtimeDir": ".opengtm/runtime",
+  "workspaceId": "workspace-public-demo",
+  "initiativeId": "initiative-public-demo",
+  "workspaceName": "Public Demo Workspace",
+  "initiativeTitle": "OpenGTM Reference Run",
+  "workspaceRoot": ".",
+  "autonomyMode": "off"
+}

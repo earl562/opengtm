@@ -47,7 +47,8 @@ export function rollbackToCheckpoint(store: OpenGtmStorage, checkpoint: OpenGtmC
     'artifacts',
     'memory_records',
     'policy_decisions',
-    'approval_requests'
+    'approval_requests',
+    'feedback_records'
   ] as const
 
   const deletedByTable: Record<string, number> = {}

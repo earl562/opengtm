@@ -30,20 +30,27 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e:canonical": "npx vitest run packages/cli/test/e2e-app.test.ts",
     "test:mutation": "npx stryker run",
     "test:mutation:ci": "npx stryker run --reporter=junit --reporter-outfile=.artifacts/unit/junit.xml",
     "typecheck": "tsc --noEmit",
     "lint": "echo 'Lint not configured yet' && exit 0",
     "build": "npm --workspaces --if-present run build",
     "build:clean": "rm -rf packages/*/dist",
+    "audit:contradictions": "node ./scripts/contradiction-audit.mjs",
+    "report:canonical:ci": "node ./scripts/export-canonical-ci-artifacts.mjs",
+    "pack:check": "node ./scripts/pack-check.mjs",
+    "smoke:install:cli": "node ./scripts/smoke-cli-install.mjs",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "release:publish": "changeset publish"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "@stryker-mutator/core": "^9.6.0",
     "@changesets/cli": "^2.27.1",
+    "@stryker-mutator/core": "^9.6.0",
+    "@stryker-mutator/vitest-runner": "^9.6.1",
+    "@types/node": "^22.0.0",
     "tsup": "^8.0.0",
     "typescript": "^5.7.0",
     "vitest": "^2.0.0"

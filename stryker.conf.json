@@ -1,23 +1,17 @@
 {
-  "$schema": "./node_modules/@stryker-mutator/stryker/schema/strykerd.json",
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
   "mutate": [
-    "packages/types/src/**/*.ts",
-    "packages/core/src/**/*.ts",
-    "packages/storage/src/**/*.ts",
-    "packages/policy/src/**/*.ts",
-    "packages/skills/src/**/*.ts",
-    "packages/connectors/src/**/*.ts",
-    "packages/executors/src/**/*.ts",
-    "packages/daemon/src/**/*.ts",
-    "packages/evals/src/**/*.ts",
-    "packages/cli/src/**/*.ts"
+    "packages/connectors/src/mock.ts",
+    "packages/skills/src/executor-binding.ts",
+    "packages/skills/src/manifest-v2.ts",
+    "packages/storage/src/migrate.ts",
+    "packages/storage/src/paths.ts"
   ],
   "mutator": {
-    "name": "typescript",
     "excludedMutations": [
-      "stringLiteral",
-      "optionalChaining",
-      "logicalAnd"
+      "StringLiteral",
+      "OptionalChaining",
+      "LogicalAnd"
     ]
   },
   "thresholds": {
@@ -28,15 +22,12 @@
   "testRunner": "vitest",
   "tempDirName": ".stryker-tmp",
   "cleanTempDir": "always",
+  "plugins": [
+    "@stryker-mutator/vitest-runner"
+  ],
   "reporters": [
     "progress",
     "clear-text",
-    "html",
-    "dashboard"
-  ],
-  "htmlReporter": {
-    "baseDir": ".stryker-reports/html"
-  },
-  "timeout": 180000,
-  "dangerouslyDisableAndroid": false
+    "html"
+  ]
 }

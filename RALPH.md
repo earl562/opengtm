@@ -6,10 +6,10 @@ completion-promise: "ALL TESTS PASS AND MUTATION SCORE >= 80%"
 ---
 
 Commands:
-- tests: cd OpenGTM && npx vitest run
-- mutation-tests: cd OpenGTM && npx stryker run
-- typecheck: cd OpenGTM && npx tsc --noEmit
-- build: cd OpenGTM && npm run build
+- tests: npm test
+- mutation-tests: npx stryker run
+- typecheck: npm run typecheck
+- build: npm run build
 
 Loop:
   run: tests

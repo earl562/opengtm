@@ -42,3 +42,10 @@ packages/*/node_modules/
 packages/*/dist/
 test/node_modules/
 test/dist/
+
+# Reconciliation guard (2026-04-18)
+# The nested `OpenGTM/` directory was a divergent duplicate of `packages/*` that caused silent drift.
+# It was reconciled and deleted. Do NOT reintroduce it. Canonical packages live at `packages/*`.
+# See docs/design/loop-toggles-salvage.md for the salvaged design notes.
+/OpenGTM/
+.omx/

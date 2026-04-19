@@ -40,15 +40,64 @@ export type OpenGtmSystemOfRecord = typeof OPEN_GTM_SYSTEMS_OF_RECORD[number]
 
 // === Connector Families ===
 export const OPEN_GTM_CONNECTOR_FAMILIES = [
-  'docs-knowledge',
-  'sheets-tables',
   'crm',
-  'browser-automation',
-  'email-calendar',
-  'api-internal-tools'
+  'enrichment',
+  'web_research',
+  'meeting_intelligence',
+  'warehouse',
+  'email',
+  'calendar',
+  'comms',
+  'support',
+  'docs'
 ] as const
 
 export type OpenGtmConnectorFamily = typeof OPEN_GTM_CONNECTOR_FAMILIES[number]
+
+const OPEN_GTM_CONNECTOR_FAMILY_SET = new Set<string>(OPEN_GTM_CONNECTOR_FAMILIES)
+
+export const OPEN_GTM_CONNECTOR_FAMILY_ALIASES: Record<string, OpenGtmConnectorFamily[]> = {
+  crm: ['crm'],
+  enrichment: ['enrichment'],
+  web_research: ['web_research'],
+  meeting_intelligence: ['meeting_intelligence'],
+  warehouse: ['warehouse'],
+  email: ['email'],
+  calendar: ['calendar'],
+  comms: ['comms'],
+  support: ['support'],
+  docs: ['docs'],
+  docs_knowledge: ['docs'],
+  knowledge: ['docs'],
+  browser_automation: ['web_research'],
+  browser: ['web_research'],
+  email_calendar: ['email', 'calendar'],
+  sheets_tables: ['warehouse'],
+  communications: ['comms'],
+  api_internal_tools: ['docs'],
+  meeting_intel: ['meeting_intelligence']
+}
+
+export function isOpenGtmConnectorFamily(value: string): value is OpenGtmConnectorFamily {
+  return OPEN_GTM_CONNECTOR_FAMILY_SET.has(value)
+}
+
+export function toConnectorFamilyAliasKey(value: string): string {
+  return value.trim().toLowerCase().replace(/[\s-]+/g, '_')
+}
+
+export function resolveConnectorFamilyCandidates(value: string): OpenGtmConnectorFamily[] {
+  const aliasKey = toConnectorFamilyAliasKey(value)
+  if (isOpenGtmConnectorFamily(aliasKey)) {
+    return [aliasKey]
+  }
+
+  return OPEN_GTM_CONNECTOR_FAMILY_ALIASES[aliasKey] || []
+}
+
+export function normalizeConnectorFamily(value: string): OpenGtmConnectorFamily {
+  return (resolveConnectorFamilyCandidates(value)[0] || value) as OpenGtmConnectorFamily
+}
 
 // === Action Types ===
 export const OPEN_GTM_ACTION_TYPES = [
@@ -96,6 +145,16 @@ export const OPEN_GTM_CONNECTOR_SESSION_STATUSES = [
 
 export type OpenGtmConnectorSessionStatus = typeof OPEN_GTM_CONNECTOR_SESSION_STATUSES[number]
 
+// === Public Support Tiers ===
+export const OPEN_GTM_SUPPORT_TIERS = [
+  'live',
+  'simulated',
+  'contract-only',
+  'reference-only'
+] as const
+
+export type OpenGtmSupportTier = typeof OPEN_GTM_SUPPORT_TIERS[number]
+
 // === Run Attempt Statuses ===
 export const OPEN_GTM_RUN_ATTEMPT_STATUSES = [
   'running',
@@ -137,8 +196,10 @@ export type OpenGtmRedactionState = typeof OPEN_GTM_REDACTION_STATES[number]
 // === Workflow Run Statuses ===
 export const OPEN_GTM_WORKFLOW_RUN_STATUSES = [
   'running',
+  'awaiting-approval',
   'completed',
-  'failed'
+  'failed',
+  'cancelled'
 ] as const
 
 export type OpenGtmWorkflowRunStatus = typeof OPEN_GTM_WORKFLOW_RUN_STATUSES[number]
@@ -263,10 +324,20 @@ export const OPEN_GTM_WORKFLOW_TRANSITIONS: Record<OpenGtmWorkflowStatus, OpenGt
 }
 
 export const OPEN_GTM_WORKFLOW_RUN_TRANSITIONS: Record<OpenGtmWorkflowRunStatus, OpenGtmWorkflowRunStatus[]> = {
-  running: ['completed', 'failed'],
+  running: ['awaiting-approval', 'completed', 'failed', 'cancelled'],
+  'awaiting-approval': ['running', 'completed', 'failed', 'cancelled'],
   completed: [],
-  failed: []
+  failed: [],
+  cancelled: []
 }
+
+export const OPEN_GTM_FEEDBACK_ACTIONS = [
+  'approve',
+  'revise',
+  'deny'
+] as const
+
+export type OpenGtmFeedbackAction = typeof OPEN_GTM_FEEDBACK_ACTIONS[number]
 
 export const OPEN_GTM_RUN_ATTEMPT_TRANSITIONS: Record<OpenGtmRunAttemptStatus, OpenGtmRunAttemptStatus[]> = {
   running: ['awaiting-approval', 'completed', 'failed', 'cancelled'],
@@ -288,21 +359,21 @@ export const OPEN_GTM_LANE_POLICIES: Record<OpenGtmLane, {
     defaultSandbox: 'read-only',
     externalMutationRequiresApproval: true,
     repoMutationRequiresApproval: true,
-    connectorFamilies: ['docs-knowledge', 'sheets-tables', 'crm', 'api-internal-tools'],
+    connectorFamilies: ['docs', 'crm', 'enrichment', 'web_research', 'meeting_intelligence', 'warehouse'],
     traceRequired: true
   },
   'build-integrate': {
     defaultSandbox: 'workspace-write',
     externalMutationRequiresApproval: true,
     repoMutationRequiresApproval: true,
-    connectorFamilies: ['docs-knowledge', 'api-internal-tools', 'sheets-tables'],
+    connectorFamilies: ['docs'],
     traceRequired: true
   },
   'ops-automate': {
     defaultSandbox: 'read-only',
     externalMutationRequiresApproval: true,
     repoMutationRequiresApproval: true,
-    connectorFamilies: ['crm', 'browser-automation', 'email-calendar', 'docs-knowledge', 'sheets-tables'],
+    connectorFamilies: ['crm', 'email', 'calendar', 'comms', 'support', 'docs', 'warehouse', 'meeting_intelligence', 'web_research'],
     traceRequired: true
   }
 }

@@ -1,7 +1,8 @@
 export const HIGH_TRUST_CONNECTOR_FAMILIES = [
   'crm',
-  'browser-automation',
-  'email-calendar'
+  'email',
+  'calendar',
+  'comms'
 ] as const
 
 export const OPEN_GTM_POLICY_PROFILES = [

@@ -1,0 +1,423 @@
+# Canonical Debug Bundle
+
+- generatedAt: 2026-04-19T17:59:42.505Z
+- canonical scenario: crm.roundtrip
+
+## Workflow Run
+```json
+{
+  "workflow": {
+    "id": "crm.roundtrip",
+    "name": "Canonical CRM Roundtrip",
+    "description": "Ingest a lead.created event, produce research and outreach artifacts, route approval, and log the outcome back to the local CRM fixture.",
+    "trigger": "manual",
+    "lane": "ops-automate",
+    "persona": "SDR",
+    "fixtureSetId": "crm-roundtrip",
+    "connectorFamilies": [
+      "crm",
+      "docs",
+      "comms"
+    ],
+    "artifactKinds": [
+      "analysis",
+      "approval",
+      "trace"
+    ],
+    "requiresApproval": true,
+    "supportTier": "live",
+    "isCanonical": true
+  },
+  "workflowRun": {
+    "id": "9eb07b6f-a326-462c-b677-5e6cc6ccdd69",
+    "status": "awaiting-approval"
+  },
+  "workflowId": "crm.roundtrip",
+  "workflowRunId": "9eb07b6f-a326-462c-b677-5e6cc6ccdd69",
+  "lane": "ops-automate",
+  "workflowState": "awaiting-approval",
+  "persona": "SDR",
+  "fixtureSetId": "crm-roundtrip",
+  "supportTier": "live",
+  "isCanonical": true,
+  "canonicalScenarioId": "crm.roundtrip",
+  "traceId": "d206f4de-f6a9-4670-98d5-aeb6ae7cc824",
+  "logFilePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/logs/run-d206f4de-f6a9-4670-98d5-aeb6ae7cc824.jsonl",
+  "approvalRequestId": "7fca8d41-c7a1-468f-a2e8-b70bbfe98f58",
+  "artifactId": "767f08e3-9844-471b-a75c-47e2acae5f13",
+  "artifactPath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/artifacts/global/767f08e3-9844-471b-a75c-47e2acae5f13.json",
+  "nextAction": "Approve or deny the canonical CRM roundtrip outreach draft, then inspect CRM activity, traces, and feedback lineage."
+}
+```
+
+## Approval
+```json
+{
+  "action": "approve",
+  "approval": {
+    "id": "7fca8d41-c7a1-468f-a2e8-b70bbfe98f58",
+    "createdAt": "2026-04-19T17:59:42.063Z",
+    "workspaceId": "4ba6a6b9-594e-452c-a75a-67bf5efdd688",
+    "workItemId": "bb52f171-58f2-416c-82d7-050685032131",
+    "lane": "ops-automate",
+    "actionSummary": "Ops action requires approval: Draft outreach for CI Artifact Lead",
+    "riskLevel": "critical",
+    "target": "Draft outreach for CI Artifact Lead",
+    "status": "approved",
+    "decisionRef": "32472d92-5603-4601-8182-c912bc90d38a"
+  },
+  "workItem": {
+    "id": "bb52f171-58f2-416c-82d7-050685032131",
+    "title": "Ops: Draft outreach for CI Artifact Lead",
+    "status": "completed"
+  },
+  "trace": {
+    "id": "d206f4de-f6a9-4670-98d5-aeb6ae7cc824",
+    "status": "completed",
+    "logFilePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/logs/run-d206f4de-f6a9-4670-98d5-aeb6ae7cc824.jsonl"
+  },
+  "artifact": {
+    "id": "7cf254aa-9045-4177-8374-1ac671d84bb2",
+    "path": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/artifacts/global/7cf254aa-9045-4177-8374-1ac671d84bb2.json",
+    "title": "Ops execution: Draft outreach for CI Artifact Lead"
+  },
+  "approvals": [
+    {
+      "id": "7fca8d41-c7a1-468f-a2e8-b70bbfe98f58",
+      "createdAt": "2026-04-19T17:59:42.063Z",
+      "workspaceId": "4ba6a6b9-594e-452c-a75a-67bf5efdd688",
+      "workItemId": "bb52f171-58f2-416c-82d7-050685032131",
+      "lane": "ops-automate",
+      "actionSummary": "Ops action requires approval: Draft outreach for CI Artifact Lead",
+      "riskLevel": "critical",
+      "target": "Draft outreach for CI Artifact Lead",
+      "status": "approved",
+      "decisionRef": "32472d92-5603-4601-8182-c912bc90d38a"
+    }
+  ],
+  "summary": {
+    "total": 1,
+    "pending": 0,
+    "approved": 1,
+    "denied": 0,
+    "nextAction": "Approval recorded. The queued build workflow resumed, wrote a continuation artifact, and completed successfully.",
+    "workflowState": "completed",
+    "workItemState": "completed",
+    "approvalState": "approved"
+  }
+}
+```
+
+## Trace
+```json
+{
+  "trace": {
+    "id": "d206f4de-f6a9-4670-98d5-aeb6ae7cc824",
+    "createdAt": "2026-04-19T17:59:42.061Z",
+    "workItemId": "bb52f171-58f2-416c-82d7-050685032131",
+    "workflowId": "crm.roundtrip",
+    "lane": "ops-automate",
+    "status": "completed",
+    "steps": [
+      {
+        "name": "load-context",
+        "status": "completed"
+      },
+      {
+        "name": "prepare-action",
+        "status": "completed"
+      },
+      {
+        "name": "approve-or-send",
+        "status": "completed"
+      },
+      {
+        "name": "record-outcome",
+        "status": "completed"
+      }
+    ],
+    "persona": "SDR",
+    "fixtureSetId": "crm-roundtrip",
+    "debugBundlePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/logs/run-d206f4de-f6a9-4670-98d5-aeb6ae7cc824.jsonl",
+    "logFilePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/logs/run-d206f4de-f6a9-4670-98d5-aeb6ae7cc824.jsonl",
+    "toolCalls": [],
+    "connectorCalls": [
+      {
+        "provider": "opengtm-crm",
+        "family": "crm",
+        "action": "mutate-connector",
+        "target": "activities",
+        "executionMode": "live",
+        "supportTier": "live",
+        "crmActivityId": "e9a5f29a-66c3-4e24-ad86-110e14a823aa"
+      }
+    ],
+    "policyDecisionIds": [],
+    "artifactIds": [
+      "7cf254aa-9045-4177-8374-1ac671d84bb2"
+    ],
+    "feedbackEventIds": [
+      "1a8ff5e4-4a15-4e69-9d4d-eb67c23bc04d"
+    ],
+    "runAttemptId": null,
+    "observedFacts": [
+      {
+        "kind": "truthfulness",
+        "scope": "ops-approval-resume",
+        "supportTier": "live",
+        "approvalRequestId": "7fca8d41-c7a1-468f-a2e8-b70bbfe98f58",
+        "checkpointId": "9eb07b6f-a326-462c-b677-5e6cc6ccdd69-post-research",
+        "crmActivityId": "e9a5f29a-66c3-4e24-ad86-110e14a823aa"
+      },
+      {
+        "kind": "recovery-semantics",
+        "scope": "ops-approval-resume",
+        "reversibleEffects": [
+          "research-artifact",
+          "approval-artifact"
+        ],
+        "resumableEffects": [
+          "approval-gate",
+          "draft-review"
+        ],
+        "operatorInterventionRequired": [
+          "crm-activity-log"
+        ],
+        "rollbackOutcome": "operator-intervention-required"
+      }
+    ],
+    "inferences": [],
+    "actionRequests": [],
+    "redactionMarkers": [],
+    "startedAt": "2026-04-19T17:59:42.061Z",
+    "endedAt": "2026-04-19T17:59:42.123Z"
+  },
+  "workItem": {
+    "id": "bb52f171-58f2-416c-82d7-050685032131",
+    "createdAt": "2026-04-19T17:59:42.061Z",
+    "workspaceId": "4ba6a6b9-594e-452c-a75a-67bf5efdd688",
+    "initiativeId": "49a8c286-6fae-48af-b9c0-c2d21736c4cd",
+    "workflowId": "crm.roundtrip",
+    "workflowRunId": "9eb07b6f-a326-462c-b677-5e6cc6ccdd69",
+    "journeyId": null,
+    "ownerLane": "ops-automate",
+    "title": "Ops: Draft outreach for CI Artifact Lead",
+    "goal": "Draft outreach for CI Artifact Lead",
+    "status": "completed",
+    "riskLevel": "low",
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "constraints": [],
+    "requiredOutputs": [],
+    "sourceIds": [
+      "de06acd1-fca6-4e40-b998-092603f0bcab",
+      "40af7f16-eeda-4ef3-809b-03811ff99223"
+    ],
+    "connectorTargets": [
+      "crm-db:/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/fixtures/opengtm-crm.sqlite",
+      "crm-lead:c979d02d-c1ee-4938-9fcd-4a6199e8ad52",
+      "checkpoint:9eb07b6f-a326-462c-b677-5e6cc6ccdd69-post-research"
+    ]
+  },
+  "feedback": [
+    {
+      "id": "1a8ff5e4-4a15-4e69-9d4d-eb67c23bc04d",
+      "createdAt": "2026-04-19T17:59:42.118Z",
+      "workspaceId": "4ba6a6b9-594e-452c-a75a-67bf5efdd688",
+      "traceId": "d206f4de-f6a9-4670-98d5-aeb6ae7cc824",
+      "approvalRequestId": "7fca8d41-c7a1-468f-a2e8-b70bbfe98f58",
+      "artifactId": null,
+      "workflowId": "crm.roundtrip",
+      "persona": "SDR",
+      "action": "approve",
+      "actor": "operator",
+      "message": "Approved Ops action requires approval: Draft outreach for CI Artifact Lead"
+    }
+  ],
+  "summary": {
+    "feedbackCount": 1,
+    "nextAction": "Inspect the trace metadata, then replay it or continue the linked workflow."
+  }
+}
+```
+
+## Replay
+```json
+{
+  "mode": "deterministic-replay",
+  "trace": {
+    "id": "d206f4de-f6a9-4670-98d5-aeb6ae7cc824",
+    "createdAt": "2026-04-19T17:59:42.061Z",
+    "workItemId": "bb52f171-58f2-416c-82d7-050685032131",
+    "workflowId": "crm.roundtrip",
+    "lane": "ops-automate",
+    "status": "completed",
+    "steps": [
+      {
+        "name": "load-context",
+        "status": "completed"
+      },
+      {
+        "name": "prepare-action",
+        "status": "completed"
+      },
+      {
+        "name": "approve-or-send",
+        "status": "completed"
+      },
+      {
+        "name": "record-outcome",
+        "status": "completed"
+      }
+    ],
+    "persona": "SDR",
+    "fixtureSetId": "crm-roundtrip",
+    "debugBundlePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/logs/run-d206f4de-f6a9-4670-98d5-aeb6ae7cc824.jsonl",
+    "logFilePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/logs/run-d206f4de-f6a9-4670-98d5-aeb6ae7cc824.jsonl",
+    "toolCalls": [],
+    "connectorCalls": [
+      {
+        "provider": "opengtm-crm",
+        "family": "crm",
+        "action": "mutate-connector",
+        "target": "activities",
+        "executionMode": "live",
+        "supportTier": "live",
+        "crmActivityId": "e9a5f29a-66c3-4e24-ad86-110e14a823aa"
+      }
+    ],
+    "policyDecisionIds": [],
+    "artifactIds": [
+      "7cf254aa-9045-4177-8374-1ac671d84bb2"
+    ],
+    "feedbackEventIds": [
+      "1a8ff5e4-4a15-4e69-9d4d-eb67c23bc04d"
+    ],
+    "runAttemptId": null,
+    "observedFacts": [
+      {
+        "kind": "truthfulness",
+        "scope": "ops-approval-resume",
+        "supportTier": "live",
+        "approvalRequestId": "7fca8d41-c7a1-468f-a2e8-b70bbfe98f58",
+        "checkpointId": "9eb07b6f-a326-462c-b677-5e6cc6ccdd69-post-research",
+        "crmActivityId": "e9a5f29a-66c3-4e24-ad86-110e14a823aa"
+      },
+      {
+        "kind": "recovery-semantics",
+        "scope": "ops-approval-resume",
+        "reversibleEffects": [
+          "research-artifact",
+          "approval-artifact"
+        ],
+        "resumableEffects": [
+          "approval-gate",
+          "draft-review"
+        ],
+        "operatorInterventionRequired": [
+          "crm-activity-log"
+        ],
+        "rollbackOutcome": "operator-intervention-required"
+      }
+    ],
+    "inferences": [],
+    "actionRequests": [],
+    "redactionMarkers": [],
+    "startedAt": "2026-04-19T17:59:42.061Z",
+    "endedAt": "2026-04-19T17:59:42.123Z"
+  },
+  "workItem": {
+    "id": "bb52f171-58f2-416c-82d7-050685032131",
+    "createdAt": "2026-04-19T17:59:42.061Z",
+    "workspaceId": "4ba6a6b9-594e-452c-a75a-67bf5efdd688",
+    "initiativeId": "49a8c286-6fae-48af-b9c0-c2d21736c4cd",
+    "workflowId": "crm.roundtrip",
+    "workflowRunId": "9eb07b6f-a326-462c-b677-5e6cc6ccdd69",
+    "journeyId": null,
+    "ownerLane": "ops-automate",
+    "title": "Ops: Draft outreach for CI Artifact Lead",
+    "goal": "Draft outreach for CI Artifact Lead",
+    "status": "completed",
+    "riskLevel": "low",
+    "leaseOwner": null,
+    "leaseExpiresAt": null,
+    "constraints": [],
+    "requiredOutputs": [],
+    "sourceIds": [
+      "de06acd1-fca6-4e40-b998-092603f0bcab",
+      "40af7f16-eeda-4ef3-809b-03811ff99223"
+    ],
+    "connectorTargets": [
+      "crm-db:/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/fixtures/opengtm-crm.sqlite",
+      "crm-lead:c979d02d-c1ee-4938-9fcd-4a6199e8ad52",
+      "checkpoint:9eb07b6f-a326-462c-b677-5e6cc6ccdd69-post-research"
+    ]
+  },
+  "feedback": [
+    {
+      "id": "1a8ff5e4-4a15-4e69-9d4d-eb67c23bc04d",
+      "createdAt": "2026-04-19T17:59:42.118Z",
+      "workspaceId": "4ba6a6b9-594e-452c-a75a-67bf5efdd688",
+      "traceId": "d206f4de-f6a9-4670-98d5-aeb6ae7cc824",
+      "approvalRequestId": "7fca8d41-c7a1-468f-a2e8-b70bbfe98f58",
+      "artifactId": null,
+      "workflowId": "crm.roundtrip",
+      "persona": "SDR",
+      "action": "approve",
+      "actor": "operator",
+      "message": "Approved Ops action requires approval: Draft outreach for CI Artifact Lead"
+    }
+  ],
+  "summary": {
+    "feedbackCount": 1,
+    "nextAction": "This replay is read-only recorded state. Use traces rerun <trace-id> to re-execute the underlying workflow or lane."
+  }
+}
+```
+
+## Rerun
+```json
+{
+  "workflow": {
+    "id": "crm.roundtrip",
+    "name": "Canonical CRM Roundtrip",
+    "description": "Ingest a lead.created event, produce research and outreach artifacts, route approval, and log the outcome back to the local CRM fixture.",
+    "trigger": "manual",
+    "lane": "ops-automate",
+    "persona": "SDR",
+    "fixtureSetId": "crm-roundtrip",
+    "connectorFamilies": [
+      "crm",
+      "docs",
+      "comms"
+    ],
+    "artifactKinds": [
+      "analysis",
+      "approval",
+      "trace"
+    ],
+    "requiresApproval": true,
+    "supportTier": "live",
+    "isCanonical": true
+  },
+  "workflowRun": {
+    "id": "6030005b-7ec7-49c6-b424-d75df3832982",
+    "status": "awaiting-approval"
+  },
+  "workflowId": "crm.roundtrip",
+  "workflowRunId": "6030005b-7ec7-49c6-b424-d75df3832982",
+  "lane": "ops-automate",
+  "workflowState": "awaiting-approval",
+  "persona": "SDR",
+  "fixtureSetId": "crm-roundtrip",
+  "supportTier": "live",
+  "isCanonical": true,
+  "canonicalScenarioId": "crm.roundtrip",
+  "traceId": "d0e463a0-1a0f-4c25-93de-eb8a1c093631",
+  "logFilePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/logs/run-d0e463a0-1a0f-4c25-93de-eb8a1c093631.jsonl",
+  "approvalRequestId": "c4caa072-2fe4-46f8-836c-0a70c05429b5",
+  "artifactId": "cb828619-3ea9-4273-a0ed-eb5ad12f6cba",
+  "artifactPath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/artifacts/global/cb828619-3ea9-4273-a0ed-eb5ad12f6cba.json",
+  "nextAction": "Approve or deny the canonical CRM roundtrip outreach draft, then inspect CRM activity, traces, and feedback lineage."
+}
+```

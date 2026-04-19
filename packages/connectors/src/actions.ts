@@ -5,6 +5,13 @@ export function supportsConnectorAction(contract: OpenGtmConnectorContract, acti
   return actions.includes(action)
 }
 
+function inferCapabilityMode(action: string): 'read' | 'write' {
+  const normalizedAction = action.toLowerCase()
+  const writeHints = ['write', 'update', 'create', 'send', 'draft', 'schedule', 'notify', 'approval', 'log', 'mutate']
+
+  return writeHints.some((hint) => normalizedAction.includes(hint)) ? 'write' : 'read'
+}
+
 function inferConnectorMode(contract: OpenGtmConnectorContract, action: string) {
   if (supportsConnectorAction(contract, action, 'write')) return 'write'
   if (supportsConnectorAction(contract, action, 'read')) return 'read'
@@ -12,8 +19,17 @@ function inferConnectorMode(contract: OpenGtmConnectorContract, action: string) 
 }
 
 function mapHarnessActionToConnectorAction(contract: OpenGtmConnectorContract, action: string) {
-  if (contract.capabilities.includes(action) || contract.readActions.includes(action) || contract.writeActions.includes(action)) {
+  if (contract.readActions.includes(action) || contract.writeActions.includes(action)) {
     return action
+  }
+
+  if (contract.capabilities.includes(action)) {
+    const mode = inferCapabilityMode(action)
+    if (mode === 'write') {
+      return contract.writeActions[0] || contract.readActions[0] || action
+    }
+
+    return contract.readActions[0] || contract.writeActions[0] || action
   }
 
   if (action === 'ingest-source' || action === 'synthesize' || action === 'read-connector') {

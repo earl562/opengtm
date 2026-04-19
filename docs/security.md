@@ -9,3 +9,7 @@
 
 ## Logging
 - Logs and traces must never include secret material.
+
+## Runtime logs
+- CLI runs write per-run JSONL logs under the runtime root (default `./.opengtm/runtime/logs/`).
+- Each trace stores `logFilePath` pointing at `run-<traceId>.jsonl`.

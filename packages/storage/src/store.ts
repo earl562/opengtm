@@ -26,7 +26,7 @@ export function createStorage({ rootDir }: { rootDir: string }): OpenGtmStorage 
 }
 
 function assertKnownTable(table: string): asserts table is OpenGtmStorageTable {
-  const tables = ['workspaces','initiatives','initiative_summaries','accounts','contacts','journeys','inbox_items','analytics_snapshots','conversation_threads','system_records','reconciliation_reports','work_items','run_attempts','artifacts','memory_records','skills','connectors','connector_sessions','policy_decisions','approval_requests','audit_events','handoff_packets','run_traces','workflows','workflow_runs'] as const
+  const tables = ['workspaces','initiatives','initiative_summaries','accounts','contacts','journeys','inbox_items','analytics_snapshots','conversation_threads','system_records','reconciliation_reports','work_items','run_attempts','artifacts','memory_records','skills','connectors','connector_sessions','policy_decisions','approval_requests','feedback_records','audit_events','handoff_packets','run_traces','workflows','workflow_runs'] as const
   if (!(tables as readonly string[]).includes(table)) {
     throw new Error(`Unknown OpenGTM storage table: ${table}`)
   }
@@ -88,7 +88,7 @@ export function deleteRecordsAfter(store: OpenGtmStorage, table: OpenGtmStorageT
 export function validateStorage(store: OpenGtmStorage) {
   const rows = store.db.prepare("SELECT name FROM sqlite_master WHERE type = 'table'").all() as Array<{ name: string }>
   const present = new Set(rows.map((row) => row.name))
-  const tables = ['workspaces','initiatives','initiative_summaries','accounts','contacts','journeys','inbox_items','analytics_snapshots','conversation_threads','system_records','reconciliation_reports','work_items','run_attempts','artifacts','memory_records','skills','connectors','connector_sessions','policy_decisions','approval_requests','audit_events','handoff_packets','run_traces','workflows','workflow_runs'] as const
+  const tables = ['workspaces','initiatives','initiative_summaries','accounts','contacts','journeys','inbox_items','analytics_snapshots','conversation_threads','system_records','reconciliation_reports','work_items','run_attempts','artifacts','memory_records','skills','connectors','connector_sessions','policy_decisions','approval_requests','feedback_records','audit_events','handoff_packets','run_traces','workflows','workflow_runs'] as const
   const missingTables = [...tables].filter((table) => !present.has(table))
 
   return {

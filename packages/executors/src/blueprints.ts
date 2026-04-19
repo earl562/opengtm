@@ -10,17 +10,17 @@ export interface OpenGtmExecutionBlueprint {
 export const OPEN_GTM_EXECUTION_BLUEPRINTS: Record<OpenGtmLane, Omit<OpenGtmExecutionBlueprint, 'lane'>> = {
   research: {
     phases: ['ingest', 'compare', 'synthesize', 'handoff'],
-    connectorFamilies: ['docs-knowledge', 'sheets-tables', 'api-internal-tools', 'crm'],
+    connectorFamilies: ['docs', 'crm', 'enrichment', 'web_research', 'meeting_intelligence', 'warehouse'],
     artifactKinds: ['source-record', 'synthesis', 'decision-log']
   },
   'build-integrate': {
     phases: ['spec', 'implement', 'validate', 'handoff'],
-    connectorFamilies: ['docs-knowledge', 'sheets-tables', 'api-internal-tools'],
+    connectorFamilies: ['docs'],
     artifactKinds: ['spec', 'analysis', 'trace']
   },
   'ops-automate': {
     phases: ['load-context', 'prepare-action', 'approve-or-send', 'record-outcome'],
-    connectorFamilies: ['crm', 'browser-automation', 'email-calendar', 'docs-knowledge', 'sheets-tables', 'api-internal-tools'],
+    connectorFamilies: ['crm', 'email', 'calendar', 'comms', 'support', 'docs', 'warehouse', 'meeting_intelligence', 'web_research'],
     artifactKinds: ['campaign-brief', 'approval', 'trace']
   }
 }

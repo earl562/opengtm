@@ -10,5 +10,21 @@
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
-  }
+  },
+  "private": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/earl562/opengtm.git"
+  },
+  "homepage": "https://github.com/earl562/opengtm",
+  "bugs": {
+    "url": "https://github.com/earl562/opengtm/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src/**"
+  ]
 }

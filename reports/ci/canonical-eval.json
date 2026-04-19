@@ -1,0 +1,40 @@
+{
+  "suite": "canonical",
+  "canonicalScenarioId": "crm.roundtrip",
+  "pass": true,
+  "thresholds": {
+    "transferability": 80,
+    "maintainability": 80,
+    "recoveryRobustness": 80,
+    "contextEfficiency": 80,
+    "governanceQuality": 85
+  },
+  "dimensions": {
+    "transferability": 90,
+    "maintainability": 88,
+    "recoveryRobustness": 90,
+    "contextEfficiency": 92,
+    "governanceQuality": 94
+  },
+  "expectedMinimumDeltas": {
+    "policyGatingOff": -10,
+    "skillLoadingOff": -5
+  },
+  "observedDeltas": {
+    "policyGatingOff": -40.83333333333333,
+    "skillLoadingOff": -8.333333333333329
+  },
+  "evidence": {
+    "pendingTraceId": "aef5294b-d93b-412e-bdeb-6c2881f82e2b",
+    "approvedTraceId": "aef5294b-d93b-412e-bdeb-6c2881f82e2b",
+    "rerunTraceId": "7cb1c247-6511-461e-aa74-e9b9ec02c552",
+    "approvalCount": 3,
+    "feedbackCount": 2,
+    "activityCount": 2,
+    "contextBudgetOmissions": [
+      "working-context",
+      "disclosed-skills",
+      "connector-guidance"
+    ]
+  }
+}

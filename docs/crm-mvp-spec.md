@@ -2,6 +2,15 @@
 
 This document defines an **agentic CRM MVP** that is *inspired by* modern CRMs but implemented from scratch.
 
+## Repo decision (explicit)
+- The CRM app will live in a separate repo: `earl562/opengtm-crm` (will be created in T32).
+- License: MIT.
+- Clean-room: no code, assets, or UI copying from Twenty (or any other CRM). Use only original implementation and permissively-licensed dependencies.
+- OpenGTM harness remains its own repo (`earl562/opengtm`) and integrates via connector contracts/events.
+
+## Sequencing
+- Start CRM work only after the OpenGTM harness MVP has been verified. Status: verified (T1–T30 implemented; CI-local checks passing).
+
 ## Non-goals
 - No feature parity with Twenty or any other CRM
 - No code or asset copying from third-party repos

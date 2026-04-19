@@ -19,6 +19,7 @@ export const OPEN_GTM_STORAGE_TABLES = [
   'connector_sessions',
   'policy_decisions',
   'approval_requests',
+  'feedback_records',
   'audit_events',
   'handoff_packets',
   'run_traces',

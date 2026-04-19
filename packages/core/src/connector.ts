@@ -1,10 +1,10 @@
 import { createEntityBase, toIso } from './utils.js'
 import type { OpenGtmConnectorContract, OpenGtmConnectorContractInput, OpenGtmConnectorSession, OpenGtmConnectorSessionInput, OpenGtmConnectorExecutionError, OpenGtmConnectorExecutionErrorInput } from '@opengtm/types'
-import { OPEN_GTM_CONNECTOR_FAMILIES, type OpenGtmConnectorFamily, OPEN_GTM_CONNECTOR_SESSION_STATUSES, type OpenGtmConnectorSessionStatus } from '@opengtm/types'
+import { normalizeConnectorFamily, type OpenGtmConnectorSessionStatus } from '@opengtm/types'
 
 export function createConnectorContract(input: OpenGtmConnectorContractInput): OpenGtmConnectorContract {
   return {
-    family: input.family as OpenGtmConnectorFamily,
+    family: normalizeConnectorFamily(input.family),
     provider: input.provider,
     capabilities: input.capabilities || [],
     readActions: input.readActions || [],
@@ -21,7 +21,7 @@ export function createConnectorSession(input: OpenGtmConnectorSessionInput): Ope
     ...base,
     workspaceId: input.workspaceId,
     provider: input.provider,
-    family: input.family as OpenGtmConnectorFamily,
+    family: normalizeConnectorFamily(input.family),
     authMode: input.authMode || 'oauth',
     status: (input.status as OpenGtmConnectorSessionStatus) || 'missing-auth',
     scopes: input.scopes || [],
@@ -40,7 +40,7 @@ export function createConnectorExecutionError(input: OpenGtmConnectorExecutionEr
   return {
     id: input.id || `${input.provider}-${Date.now()}`,
     provider: input.provider,
-    family: input.family as OpenGtmConnectorFamily,
+    family: normalizeConnectorFamily(input.family),
     action: input.action as never,
     retryable: input.retryable ?? true,
     authState: input.authState || 'valid',

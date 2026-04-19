@@ -25,6 +25,7 @@ export const OPEN_GTM_CLI_COMMANDS = [
   'source',
   'plan',
   'run',
+  'opengtm',
   'handoff',
   'workflow',
   'inbox',
@@ -34,27 +35,34 @@ export const OPEN_GTM_CLI_COMMANDS = [
   'connector',
   'policy',
   'skill',
-  'memory'
+  'memory',
+  'evals',
+  'feedback'
 ] as const
 
 export type OpenGtmCliCommand = typeof OPEN_GTM_CLI_COMMANDS[number]
 
 export function parseCliArgs(args: string[]): OpenGtmCliParsed {
-  const command = args[0] || 'help'
-  const subcommand = args[1] || ''
   const flags: OpenGtmCliFlags = {}
+  const tokens: string[] = []
   const positional: string[] = []
 
-  for (let i = 2; i < args.length; i++) {
-    const arg = args[i]
+  for (const arg of args) {
     if (arg.startsWith('--')) {
       const [key, value] = arg.slice(2).split('=')
       flags[key] = value || true
     } else if (arg.startsWith('-')) {
       flags[arg.slice(1)] = true
     } else {
-      positional.push(arg)
+      tokens.push(arg)
     }
+  }
+
+  const command = tokens[0] || 'opengtm'
+  const subcommand = tokens[1] || ''
+
+  for (let i = 2; i < tokens.length; i++) {
+    positional.push(tokens[i])
   }
 
   return { command, subcommand, flags, positional }

@@ -1,4 +1,5 @@
 import type { OpenGtmConnectorContract, OpenGtmConnectorSession } from '@opengtm/types'
+import { findConnectorContract } from './bundle.js'
 
 export interface ConnectorValidationResult {
   status: string
@@ -85,8 +86,4 @@ export function getConnectorSessionHealth(
     family: session.family,
     ...validateConnectorSession(session, contract)
   }
-}
-
-function findConnectorContract(bundle: OpenGtmConnectorContract[], { provider, family }: { provider?: string; family: string }) {
-  return bundle.find((item) => item.provider === provider || item.family === family)
 }

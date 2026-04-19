@@ -1,8 +1,29 @@
 import { createPolicyDecision, createApprovalRequest, requiresExplicitApproval } from '@opengtm/core'
 import { classifyRiskLevel } from './risk.js'
-import { OPEN_GTM_POLICY_PROFILES } from './profiles.js'
-import type { OpenGtmPolicyDecision, OpenGtmApprovalRequest } from '@opengtm/types'
+import {
+  OPEN_GTM_ACTION_TYPES,
+  OPEN_GTM_LANES,
+  type OpenGtmActionType,
+  type OpenGtmApprovalRequest,
+  type OpenGtmLane,
+  type OpenGtmPolicyDecision
+} from '@opengtm/types'
 import type { OpenGtmPolicyConfig } from './config.js'
+
+const APPROVAL_GATED_ACTIONS = new Set<OpenGtmActionType>([
+  'write-repo',
+  'mutate-connector',
+  'send-message',
+  'browser-act'
+])
+
+function toOpenGtmActionType(actionType: string): OpenGtmActionType | null {
+  return OPEN_GTM_ACTION_TYPES.find((value): value is OpenGtmActionType => value === actionType) ?? null
+}
+
+function toOpenGtmLane(lane: string): OpenGtmLane | null {
+  return OPEN_GTM_LANES.find((value): value is OpenGtmLane => value === lane) ?? null
+}
 
 export function createPolicyDecisionFromAction({
   workItemId,
@@ -18,7 +39,11 @@ export function createPolicyDecisionFromAction({
   target?: string
 }): OpenGtmPolicyDecision {
   const riskLevel = classifyRiskLevel({ lane, actionType, connectorFamily })
-  const approvalRequired = requiresExplicitApproval(actionType as any, lane as any)
+  const normalizedActionType = toOpenGtmActionType(actionType)
+  const normalizedLane = toOpenGtmLane(lane)
+  const approvalRequired = normalizedActionType && normalizedLane
+    ? APPROVAL_GATED_ACTIONS.has(normalizedActionType) && requiresExplicitApproval(normalizedActionType, normalizedLane)
+    : false
 
   return createPolicyDecision({
     workItemId,

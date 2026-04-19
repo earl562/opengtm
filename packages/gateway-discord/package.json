@@ -8,11 +8,27 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@opengtm/gateways": "file:../gateways",
+    "@opengtm/gateways": "0.1.0",
     "discord.js": "^14.22.1"
   },
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
-  }
+  },
+  "private": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/earl562/opengtm.git"
+  },
+  "homepage": "https://github.com/earl562/opengtm",
+  "bugs": {
+    "url": "https://github.com/earl562/opengtm/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src/**"
+  ]
 }

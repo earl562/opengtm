@@ -33,6 +33,7 @@
       "@opengtm/core": ["./packages/core/src/index.ts"],
       "@opengtm/storage": ["./packages/storage/src/index.ts"],
       "@opengtm/policy": ["./packages/policy/src/index.ts"],
+      "@opengtm/memory": ["./packages/memory/src/index.ts"],
       "@opengtm/skills": ["./packages/skills/src/index.ts"],
       "@opengtm/connectors": ["./packages/connectors/src/index.ts"],
       "@opengtm/executors": ["./packages/executors/src/index.ts"],

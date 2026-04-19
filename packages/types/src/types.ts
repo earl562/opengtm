@@ -6,6 +6,7 @@ import type {
   OpenGtmActionType,
   OpenGtmArtifactKind,
   OpenGtmConnectorSessionStatus,
+  OpenGtmSupportTier,
   OpenGtmRunAttemptStatus,
   OpenGtmInitiativeHealthStatus,
   OpenGtmArchivalState,
@@ -18,12 +19,14 @@ import type {
   OpenGtmApprovalStatus,
   OpenGtmInboxItemStatus,
   OpenGtmInboxItemKind,
-  OpenGtmWorkflowStatus
+  OpenGtmWorkflowStatus,
+  OpenGtmFeedbackAction
 } from './constants.js'
 
 // === Base Types ===
 export type OpenGtmStringMap = Record<string, string>
 export type OpenGtmUnknownMap = Record<string, unknown>
+export type OpenGtmWorkflowId = string
 
 export interface OpenGtmEntityBase {
   id: string
@@ -297,13 +300,19 @@ export interface OpenGtmRunTraceStep {
 
 export interface OpenGtmRunTrace extends OpenGtmEntityBase {
   workItemId: string
+  workflowId: string | null
   lane: OpenGtmLane
   status: string
   steps: OpenGtmRunTraceStep[]
+  persona: string | null
+  fixtureSetId: string | null
+  debugBundlePath: string | null
+  logFilePath?: string | null
   toolCalls: OpenGtmUnknownMap[]
   connectorCalls: OpenGtmUnknownMap[]
   policyDecisionIds: string[]
   artifactIds: string[]
+  feedbackEventIds: string[]
   runAttemptId: string | null
   observedFacts: OpenGtmUnknownMap[]
   inferences: OpenGtmUnknownMap[]
@@ -316,13 +325,19 @@ export interface OpenGtmRunTrace extends OpenGtmEntityBase {
 export interface OpenGtmRunTraceInput {
   id?: string
   workItemId: string
+  workflowId?: string | null
   lane: string
   status?: string
   steps?: OpenGtmRunTraceStep[]
+  persona?: string | null
+  fixtureSetId?: string | null
+  debugBundlePath?: string | null
+  logFilePath?: string | null
   toolCalls?: OpenGtmUnknownMap[]
   connectorCalls?: OpenGtmUnknownMap[]
   policyDecisionIds?: string[]
   artifactIds?: string[]
+  feedbackEventIds?: string[]
   runAttemptId?: string | null
   observedFacts?: OpenGtmUnknownMap[]
   inferences?: OpenGtmUnknownMap[]
@@ -575,6 +590,39 @@ export interface OpenGtmWorkflowRunInput {
   createdAt?: string | Date
 }
 
+export interface OpenGtmWorkflowManifest {
+  id: OpenGtmWorkflowId
+  name: string
+  description: string
+  trigger: string
+  lane: OpenGtmLane
+  persona: string
+  fixtureSetId: string
+  connectorFamilies: OpenGtmConnectorFamily[]
+  artifactKinds: OpenGtmArtifactKind[]
+  requiresApproval: boolean
+  supportTier: OpenGtmSupportTier
+  isCanonical: boolean
+}
+
+export interface OpenGtmWorkflowRunResult {
+  workflowId: OpenGtmWorkflowId
+  workflowRunId: string
+  lane: OpenGtmLane
+  workflowState: string
+  persona: string
+  fixtureSetId: string
+  supportTier: OpenGtmSupportTier
+  isCanonical: boolean
+  canonicalScenarioId: string | null
+  traceId: string | null
+  logFilePath: string | null
+  approvalRequestId?: string | null
+  artifactId?: string | null
+  artifactPath?: string | null
+  nextAction: string
+}
+
 // === Run Attempt ===
 export interface OpenGtmRunAttempt extends OpenGtmEntityBase {
   workItemId: string
@@ -610,6 +658,33 @@ export interface OpenGtmAuditEventInput {
   entityId: string
   actor: string
   changes?: OpenGtmUnknownMap
+  createdAt?: string | Date
+}
+
+// === Feedback ===
+export interface OpenGtmFeedbackRecord extends OpenGtmEntityBase {
+  workspaceId: string
+  traceId: string
+  approvalRequestId: string | null
+  artifactId: string | null
+  workflowId: string | null
+  persona: string | null
+  action: OpenGtmFeedbackAction
+  actor: string
+  message: string
+}
+
+export interface OpenGtmFeedbackRecordInput {
+  id?: string
+  workspaceId: string
+  traceId: string
+  approvalRequestId?: string | null
+  artifactId?: string | null
+  workflowId?: string | null
+  persona?: string | null
+  action: OpenGtmFeedbackAction
+  actor: string
+  message?: string
   createdAt?: string | Date
 }
 

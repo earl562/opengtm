@@ -7,13 +7,19 @@ export function createRunTrace(input: OpenGtmRunTraceInput): OpenGtmRunTrace {
   return {
     ...base,
     workItemId: input.workItemId,
+    workflowId: input.workflowId || null,
     lane: input.lane as OpenGtmLane,
     status: input.status || 'running',
     steps: input.steps || [],
+    persona: input.persona || null,
+    fixtureSetId: input.fixtureSetId || null,
+    debugBundlePath: input.debugBundlePath || null,
+    logFilePath: input.logFilePath || null,
     toolCalls: input.toolCalls || [],
     connectorCalls: input.connectorCalls || [],
     policyDecisionIds: input.policyDecisionIds || [],
     artifactIds: input.artifactIds || [],
+    feedbackEventIds: input.feedbackEventIds || [],
     runAttemptId: input.runAttemptId || null,
     observedFacts: input.observedFacts || [],
     inferences: input.inferences || [],
@@ -24,7 +30,21 @@ export function createRunTrace(input: OpenGtmRunTraceInput): OpenGtmRunTrace {
   }
 }
 
-export function updateRunTrace(trace: OpenGtmRunTrace, updates: Partial<Pick<OpenGtmRunTrace, 'status' | 'steps' | 'endedAt'>>): OpenGtmRunTrace {
+export function updateRunTrace(
+  trace: OpenGtmRunTrace,
+  updates: Partial<Pick<
+    OpenGtmRunTrace,
+    | 'status'
+    | 'steps'
+    | 'endedAt'
+    | 'logFilePath'
+    | 'debugBundlePath'
+    | 'artifactIds'
+    | 'feedbackEventIds'
+    | 'connectorCalls'
+    | 'observedFacts'
+  >>
+): OpenGtmRunTrace {
   return {
     ...trace,
     ...updates,

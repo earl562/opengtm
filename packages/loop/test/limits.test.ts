@@ -23,4 +23,19 @@ describe('loop: runtime limits', () => {
     expect(result.status).toBe('stopped')
     expect(result.reason).toBe('cost-limit')
   })
+
+  it('stops at time limit', async () => {
+    const provider = {
+      ...createMockProvider(),
+      async generate(input: any) {
+        await new Promise((resolve) => setTimeout(resolve, 5))
+        return createMockProvider().generate(input)
+      }
+    }
+
+    const result = await runGovernedLoop({ provider, goal: 'x', limits: { maxSteps: 10, maxMillis: 1 } })
+    expect(result.status).toBe('stopped')
+    expect(result.reason).toBe('time-limit')
+    expect(result.steps.length).toBeGreaterThan(0)
+  })
 })

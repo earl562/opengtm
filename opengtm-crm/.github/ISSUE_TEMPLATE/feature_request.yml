@@ -1,0 +1,22 @@
+name: Feature request
+description: Propose a change or new capability
+labels: [enhancement]
+body:
+  - type: textarea
+    attributes:
+      label: Problem
+      description: What problem are you trying to solve?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Proposal
+      description: What should the project do?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Alternatives
+      description: What else did you consider?
+    validations:
+      required: false

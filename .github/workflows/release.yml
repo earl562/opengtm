@@ -5,16 +5,16 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  release-pr:
+  validate:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,13 +24,74 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            opengtm-crm/package-lock.json
 
       - name: Install
         run: npm ci
 
-      - name: Create release PR (Changesets)
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Contradiction audit
+        run: npm run audit:contradictions
+
+      - name: Canonical externalization eval
+        run: node packages/cli/bin/opengtm.js evals run canonical
+
+      - name: Export canonical CI artifacts
+        run: npm run report:canonical:ci
+
+      - name: Upload canonical CI artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canonical-ci-artifacts
+          path: reports/ci/**
+          retention-days: 14
+
+      - name: Pack check
+        run: npm run pack:check
+
+      - name: CLI install smoke
+        run: npm run smoke:install:cli
+
+  release:
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            opengtm-crm/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Create release PR or publish (Changesets)
         uses: changesets/action@v1
         with:
           version: npm run version-packages
+          publish: npm run release:publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

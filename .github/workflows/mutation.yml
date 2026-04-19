@@ -9,6 +9,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   mutation:
     runs-on: ubuntu-latest
@@ -22,12 +25,15 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            opengtm-crm/package-lock.json
 
       - name: Install
         run: npm ci
 
       - name: Mutation tests (Stryker)
-        run: npm run test:mutation
+        run: npm run test:mutation:ci
 
       - name: Upload Stryker artifacts
         if: always()
@@ -36,5 +42,6 @@ jobs:
           name: stryker-artifacts
           path: |
             .stryker-tmp/**
-            .stryker-reports/**
+            reports/mutation/**
+            .artifacts/unit/**
           retention-days: 7

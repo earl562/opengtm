@@ -1,4 +1,4 @@
-import type { OpenGtmConnectorContract, OpenGtmConnectorSession, OpenGtmActionType, OpenGtmConnectorFamily } from '@opengtm/types'
+import { OPEN_GTM_ACTION_TYPES, type OpenGtmActionType, type OpenGtmConnectorContract, type OpenGtmConnectorSession } from '@opengtm/types'
 import { createConnectorExecutionError } from '@opengtm/core'
 import { findConnectorContract } from './bundle.js'
 import { validateConnectorSession } from './validation.js'
@@ -14,6 +14,15 @@ export interface ConnectorActionInput {
   session?: OpenGtmConnectorSession | null
 }
 
+function toOpenGtmActionType(action: string): OpenGtmActionType {
+  const knownAction = OPEN_GTM_ACTION_TYPES.find((item): item is OpenGtmActionType => item === action)
+  if (!knownAction) {
+    throw new Error(`Unsupported OpenGTM connector action: ${action}`)
+  }
+
+  return knownAction
+}
+
 export function executeConnectorAction(bundle: OpenGtmConnectorContract[], {
   provider = null,
   family,
@@ -22,15 +31,14 @@ export function executeConnectorAction(bundle: OpenGtmConnectorContract[], {
   payload = {},
   session = null
 }: ConnectorActionInput) {
-  const contract = provider
-    ? findConnectorContract(bundle, { provider, family })
-    : bundle.find((item) => item.family === family)
+  const contract = findConnectorContract(bundle, { provider: provider || undefined, family })
 
   if (!contract) {
     throw new Error(`No OpenGTM connector contract found for ${provider || family}`)
   }
 
   const connectorAction = mapHarnessActionToConnectorAction(contract, action)
+  const normalizedAction = toOpenGtmActionType(connectorAction)
   const mode = inferConnectorMode(contract, connectorAction)
   const requiresSession = contract.secretShape.length > 0
   const validation = validateConnectorSession(session, contract)
@@ -42,7 +50,7 @@ export function executeConnectorAction(bundle: OpenGtmConnectorContract[], {
     throw createConnectorExecutionError({
       provider: contract.provider,
       family: contract.family,
-      action: connectorAction as any,
+      action: connectorAction,
       retryable: true,
       authState,
       classification: 'provider',
@@ -61,13 +69,13 @@ export function executeConnectorAction(bundle: OpenGtmConnectorContract[], {
     requiresSession,
     sessionStatus,
     authState,
-    validatedScopes: validation.validatedScopes,
-    data: buildNormalizedData({
-      family: contract.family,
-      provider: contract.provider,
-      action: action as any,
-      target,
-      payload
-    })
+      validatedScopes: validation.validatedScopes,
+      data: buildNormalizedData({
+        family: contract.family,
+        provider: contract.provider,
+        action: normalizedAction,
+        target,
+        payload
+      })
   }
 }

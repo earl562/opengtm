@@ -18,15 +18,30 @@
     "bin/**"
   ],
   "dependencies": {
-    "@opengtm/types": "file:../types",
-    "@opengtm/core": "file:../core",
-    "@opengtm/storage": "file:../storage",
-    "@opengtm/policy": "file:../policy",
-    "@opengtm/daemon": "file:../daemon"
+    "@opengtm/types": "0.1.0",
+    "@opengtm/core": "0.1.0",
+    "@opengtm/observability": "0.1.0",
+    "@opengtm/storage": "0.1.0",
+    "@opengtm/policy": "0.1.0",
+    "@opengtm/daemon": "0.1.0",
+    "@opengtm/evals": "0.1.0"
   },
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
+  },
+  "private": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/earl562/opengtm.git"
+  },
+  "homepage": "https://github.com/earl562/opengtm",
+  "bugs": {
+    "url": "https://github.com/earl562/opengtm/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
