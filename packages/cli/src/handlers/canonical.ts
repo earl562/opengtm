@@ -93,7 +93,8 @@ export async function handleCanonicalCrmRoundtripRun(args: {
     connectorTargets: [
       `crm-db:${crmDbFile}`,
       `crm-lead:${lead.id}`,
-      `checkpoint:${checkpoint.id}`
+      `checkpoint:${checkpoint.id}`,
+      `checkpoint-at:${checkpoint.createdAt}`
     ],
     supportTier: 'live',
     canonicalScenarioId: OPEN_GTM_CANONICAL_SCENARIO_ID

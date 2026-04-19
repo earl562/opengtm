@@ -1,0 +1,42 @@
+{
+  "suite": "longitudinal",
+  "canonicalScenarioId": "crm.roundtrip",
+  "pass": true,
+  "thresholds": {
+    "successRate": 100,
+    "replayConsistency": 100,
+    "rerunContinuity": 100,
+    "activityContinuity": 100
+  },
+  "dimensions": {
+    "successRate": 100,
+    "replayConsistency": 100,
+    "rerunContinuity": 100,
+    "activityContinuity": 100
+  },
+  "observedDeltas": {},
+  "evidence": {
+    "runCount": 3,
+    "activityCount": 3,
+    "runs": [
+      {
+        "workflowState": "awaiting-approval",
+        "approvalState": "approved",
+        "replayMode": "deterministic-replay",
+        "rerunState": "awaiting-approval"
+      },
+      {
+        "workflowState": "awaiting-approval",
+        "approvalState": "approved",
+        "replayMode": "deterministic-replay",
+        "rerunState": "awaiting-approval"
+      },
+      {
+        "workflowState": "awaiting-approval",
+        "approvalState": "approved",
+        "replayMode": "deterministic-replay",
+        "rerunState": "awaiting-approval"
+      }
+    ]
+  }
+}

@@ -123,9 +123,11 @@ export function parseCanonicalConnectorTargets(targets: string[]) {
   const dbFile = targets.find((item) => item.startsWith('crm-db:'))?.slice('crm-db:'.length) || null
   const leadId = targets.find((item) => item.startsWith('crm-lead:'))?.slice('crm-lead:'.length) || null
   const checkpointId = targets.find((item) => item.startsWith('checkpoint:'))?.slice('checkpoint:'.length) || null
+  const checkpointCreatedAt = targets.find((item) => item.startsWith('checkpoint-at:'))?.slice('checkpoint-at:'.length) || null
   return {
     dbFile,
     leadId,
-    checkpointId
+    checkpointId,
+    checkpointCreatedAt
   }
 }

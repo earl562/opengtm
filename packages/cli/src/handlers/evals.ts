@@ -197,5 +197,81 @@ export async function handleEvals(args: {
     }
   }
 
+  if (suite === 'longitudinal') {
+    const rootDir = mkdtempSync(join(tmpdir(), 'opengtm-longitudinal-eval-'))
+    const daemon = createLocalDaemon({ rootDir })
+    const runs: Array<Record<string, unknown>> = []
+
+    for (let i = 0; i < 3; i++) {
+      const workflow = await handleWorkflowRun({
+        daemon,
+        workflowId: 'crm.roundtrip',
+        goal: `Longitudinal Lead ${i + 1}`,
+        workspaceId: 'w1',
+        initiativeId: 'i1'
+      })
+      const approval = await handleApprovals({
+        daemon,
+        action: 'approve',
+        id: workflow.approvalRequestId!
+      })
+      const replay = await handleTraces({
+        daemon,
+        action: 'replay',
+        id: workflow.traceId!,
+        workspaceId: 'w1',
+        initiativeId: 'i1'
+      })
+      const rerun = await handleTraces({
+        daemon,
+        action: 'rerun',
+        id: workflow.traceId!,
+        workspaceId: 'w1',
+        initiativeId: 'i1'
+      })
+
+      runs.push({
+        workflowState: workflow.workflowState,
+        approvalState: (approval.summary as any)?.approvalState ?? null,
+        replayMode: 'mode' in replay ? replay.mode : null,
+        rerunState: 'workflowState' in rerun ? rerun.workflowState : null
+      })
+    }
+
+    const activities = listCanonicalActivities(resolveCanonicalCrmDbFile(rootDir))
+    const successRate = runs.filter((run) => run.approvalState === 'approved').length / runs.length
+    const replayConsistency = runs.filter((run) => run.replayMode === 'deterministic-replay').length / runs.length
+    const rerunContinuity = runs.filter((run) => run.rerunState === 'awaiting-approval').length / runs.length
+    const activityContinuity = activities.length / runs.length
+
+    const dimensions = {
+      successRate: Math.round(successRate * 100),
+      replayConsistency: Math.round(replayConsistency * 100),
+      rerunContinuity: Math.round(rerunContinuity * 100),
+      activityContinuity: Math.round(activityContinuity * 100)
+    }
+
+    const thresholds = {
+      successRate: 100,
+      replayConsistency: 100,
+      rerunContinuity: 100,
+      activityContinuity: 100
+    }
+
+    return {
+      suite,
+      canonicalScenarioId: 'crm.roundtrip',
+      pass: Object.entries(thresholds).every(([key, threshold]) => dimensions[key as keyof typeof dimensions] >= threshold),
+      thresholds,
+      dimensions,
+      observedDeltas: {},
+      evidence: {
+        runCount: runs.length,
+        activityCount: activities.length,
+        runs
+      }
+    }
+  }
+
   throw new Error(`Unknown OpenGTM eval suite: ${suite}`)
 }

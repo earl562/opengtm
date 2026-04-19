@@ -85,6 +85,7 @@ const trace = runCliJson(tempWorkspace, ['traces', 'show', workflowRun.traceId])
 const replay = runCliJson(tempWorkspace, ['traces', 'replay', workflowRun.traceId])
 const rerun = runCliJson(tempWorkspace, ['traces', 'rerun', workflowRun.traceId])
 const evalReport = runCliJson(rootDir, ['evals', 'run', 'canonical'])
+const longitudinalReport = runCliJson(rootDir, ['evals', 'run', 'longitudinal'])
 
 const debugBundle = {
   generatedAt: new Date().toISOString(),
@@ -99,6 +100,8 @@ const debugBundle = {
 
 writeFileSync(path.join(outDir, 'canonical-eval.json'), JSON.stringify(evalReport, null, 2))
 writeFileSync(path.join(outDir, 'canonical-eval.md'), renderEvalMarkdown(evalReport))
+writeFileSync(path.join(outDir, 'longitudinal-eval.json'), JSON.stringify(longitudinalReport, null, 2))
+writeFileSync(path.join(outDir, 'longitudinal-eval.md'), renderEvalMarkdown(longitudinalReport))
 writeFileSync(path.join(outDir, 'canonical-debug-bundle.json'), JSON.stringify(debugBundle, null, 2))
 writeFileSync(path.join(outDir, 'canonical-debug-bundle.md'), renderDebugMarkdown(debugBundle))
 

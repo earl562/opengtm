@@ -12,6 +12,7 @@ import type {
 	OpenGtmWorkItem,
 } from "@opengtm/types";
 import { createCanonicalActivity, parseCanonicalConnectorTargets } from "../canonical-crm.js";
+import { writeRecoveryArtifact } from "../recovery.js";
 import { continueApprovedBuildWorkflow } from "./build.js";
 import { continueApprovedOpsWorkflow } from "./ops.js";
 
@@ -219,6 +220,51 @@ export async function handleApprovals(args: {
 			});
 			upsertRecord(storage, "run_traces", updatedTrace);
 		}
+
+		const recoveryReport = writeRecoveryArtifact({
+			storage,
+			workspaceId: workItem.workspaceId,
+			initiativeId: workItem.initiativeId,
+			lane: workItem.ownerLane,
+			title: `Recovery report: ${workItem.goal}`,
+			traceRef: updatedTrace.id,
+			sourceIds: [approval.id],
+			provenance: [
+				"opengtm:recovery-report",
+				`approval:${approval.id}`,
+				"support-tier:live",
+			],
+			checkpoint: canonicalContext.checkpointId
+				? {
+						id: canonicalContext.checkpointId,
+						createdAt: canonicalContext.checkpointCreatedAt || approval.createdAt,
+					}
+				: null,
+			payload: {
+				decision: "denied",
+				workflowId: workItem.workflowId,
+				recoverySemantics: {
+					reversibleEffects: ["approval-artifact"],
+					resumableEffects: [],
+					operatorInterventionRequired: [],
+				},
+			},
+		});
+
+		updatedTrace = updateRunTrace(updatedTrace, {
+			artifactIds: [...updatedTrace.artifactIds, recoveryReport.artifact.id],
+			observedFacts: [
+				...updatedTrace.observedFacts,
+				{
+					kind: "rollback-preview",
+					scope: "approval-deny",
+					artifactId: recoveryReport.artifact.id,
+					candidateDeletionsByTable:
+						recoveryReport.rollbackPreview?.candidateDeletionsByTable ?? {},
+				},
+			],
+		});
+		upsertRecord(storage, "run_traces", updatedTrace);
 	}
 
 	updatedTrace = updateRunTrace(updatedTrace, {

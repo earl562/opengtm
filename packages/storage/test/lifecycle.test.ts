@@ -3,7 +3,7 @@ import { mkdtempSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { createStorage, upsertRecord, listRecords } from '../src/index.js'
-import { compactWorkingMemory, createCheckpoint, rollbackToCheckpoint } from '../src/lifecycle.js'
+import { compactWorkingMemory, createCheckpoint, previewRollbackToCheckpoint, rollbackToCheckpoint } from '../src/lifecycle.js'
 import { createMemoryRecord } from '@opengtm/core'
 
 describe('storage lifecycle', () => {
@@ -41,5 +41,22 @@ describe('storage lifecycle', () => {
     expect(listRecords(store as any, 'memory_records').length).toBe(1)
     rollbackToCheckpoint(store as any, cp)
     expect(listRecords(store as any, 'memory_records').length).toBe(0)
+  })
+
+  it('previews rollback candidates without deleting records', () => {
+    const root = mkdtempSync(join(tmpdir(), 'opengtm-store-'))
+    const store = createStorage({ rootDir: root })
+    const cp = createCheckpoint(store as any, { id: 'cp-preview', createdAt: new Date(Date.now() - 10_000).toISOString() })
+    const rec = createMemoryRecord({
+      workspaceId: 'w',
+      memoryType: 'working',
+      scope: 's1',
+      contentRef: 'new'
+    })
+    upsertRecord(store as any, 'memory_records', rec as any)
+
+    const preview = previewRollbackToCheckpoint(store as any, cp)
+    expect(preview.candidateDeletionsByTable.memory_records).toBe(1)
+    expect(listRecords(store as any, 'memory_records').length).toBe(1)
   })
 })

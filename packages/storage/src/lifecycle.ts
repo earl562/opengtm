@@ -31,6 +31,16 @@ export interface OpenGtmCheckpoint {
   createdAt: string
 }
 
+const ROLLBACK_TABLES = [
+  'work_items',
+  'run_traces',
+  'artifacts',
+  'memory_records',
+  'policy_decisions',
+  'approval_requests',
+  'feedback_records'
+] as const
+
 export function createCheckpoint(store: OpenGtmStorage, {
   id,
   createdAt = new Date().toISOString()
@@ -39,20 +49,25 @@ export function createCheckpoint(store: OpenGtmStorage, {
   return { id, createdAt }
 }
 
+export function previewRollbackToCheckpoint(store: OpenGtmStorage, checkpoint: OpenGtmCheckpoint) {
+  const candidateDeletionsByTable: Record<string, number> = {}
+  for (const table of ROLLBACK_TABLES) {
+    const records = listRecords<any>(store, table as any)
+    candidateDeletionsByTable[table] = records.filter((record) =>
+      String(record.createdAt || '') > checkpoint.createdAt
+    ).length
+  }
+
+  return {
+    checkpointId: checkpoint.id,
+    candidateDeletionsByTable
+  }
+}
+
 export function rollbackToCheckpoint(store: OpenGtmStorage, checkpoint: OpenGtmCheckpoint) {
   // Deterministic rollback: delete records created after checkpoint time in key mutable tables.
-  const tables = [
-    'work_items',
-    'run_traces',
-    'artifacts',
-    'memory_records',
-    'policy_decisions',
-    'approval_requests',
-    'feedback_records'
-  ] as const
-
   const deletedByTable: Record<string, number> = {}
-  for (const table of tables) {
+  for (const table of ROLLBACK_TABLES) {
     deletedByTable[table] = deleteRecordsAfter(store, table as any, checkpoint.createdAt)
   }
   return { checkpointId: checkpoint.id, deletedByTable }

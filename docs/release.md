@@ -27,5 +27,7 @@ npm run smoke:install:cli
 CI and Release now upload:
 - `reports/ci/canonical-eval.json`
 - `reports/ci/canonical-eval.md`
+- `reports/ci/longitudinal-eval.json`
+- `reports/ci/longitudinal-eval.md`
 - `reports/ci/canonical-debug-bundle.json`
 - `reports/ci/canonical-debug-bundle.md`

@@ -1,19 +1,19 @@
 {
-  "generatedAt": "2026-04-19T17:59:42.505Z",
+  "generatedAt": "2026-04-19T18:05:36.436Z",
   "canonicalScenarioId": "crm.roundtrip",
   "workspace": {
     "workspace": {
-      "id": "4ba6a6b9-594e-452c-a75a-67bf5efdd688",
-      "createdAt": "2026-04-19T17:59:41.995Z",
+      "id": "cfa4c7c0-8b92-49d7-bca8-c5caee21531a",
+      "createdAt": "2026-04-19T18:05:35.222Z",
       "name": "CI Reports",
       "slug": "ci-reports",
       "policyProfile": "default",
       "defaultConnectors": []
     },
     "initiative": {
-      "id": "49a8c286-6fae-48af-b9c0-c2d21736c4cd",
-      "createdAt": "2026-04-19T17:59:41.997Z",
-      "workspaceId": "4ba6a6b9-594e-452c-a75a-67bf5efdd688",
+      "id": "0a193f2e-7a22-4a43-a281-6b8c41a555b4",
+      "createdAt": "2026-04-19T18:05:35.224Z",
+      "workspaceId": "cfa4c7c0-8b92-49d7-bca8-c5caee21531a",
       "title": "Canonical Reports",
       "summary": "",
       "status": "active",
@@ -28,11 +28,11 @@
     },
     "config": {
       "runtimeDir": ".opengtm/runtime",
-      "workspaceId": "4ba6a6b9-594e-452c-a75a-67bf5efdd688",
-      "initiativeId": "49a8c286-6fae-48af-b9c0-c2d21736c4cd",
+      "workspaceId": "cfa4c7c0-8b92-49d7-bca8-c5caee21531a",
+      "initiativeId": "0a193f2e-7a22-4a43-a281-6b8c41a555b4",
       "workspaceName": "CI Reports",
       "initiativeTitle": "Canonical Reports",
-      "workspaceRoot": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5",
+      "workspaceRoot": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-4DaewL",
       "autonomyMode": "off"
     }
   },
@@ -60,11 +60,11 @@
       "isCanonical": true
     },
     "workflowRun": {
-      "id": "9eb07b6f-a326-462c-b677-5e6cc6ccdd69",
+      "id": "aea84e2f-71d3-4554-bb89-302da41e9e5e",
       "status": "awaiting-approval"
     },
     "workflowId": "crm.roundtrip",
-    "workflowRunId": "9eb07b6f-a326-462c-b677-5e6cc6ccdd69",
+    "workflowRunId": "aea84e2f-71d3-4554-bb89-302da41e9e5e",
     "lane": "ops-automate",
     "workflowState": "awaiting-approval",
     "persona": "SDR",
@@ -72,54 +72,54 @@
     "supportTier": "live",
     "isCanonical": true,
     "canonicalScenarioId": "crm.roundtrip",
-    "traceId": "d206f4de-f6a9-4670-98d5-aeb6ae7cc824",
-    "logFilePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/logs/run-d206f4de-f6a9-4670-98d5-aeb6ae7cc824.jsonl",
-    "approvalRequestId": "7fca8d41-c7a1-468f-a2e8-b70bbfe98f58",
-    "artifactId": "767f08e3-9844-471b-a75c-47e2acae5f13",
-    "artifactPath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/artifacts/global/767f08e3-9844-471b-a75c-47e2acae5f13.json",
+    "traceId": "4a53f3ea-f8fa-48a2-8514-56d9517605d2",
+    "logFilePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-4DaewL/.opengtm/runtime/logs/run-4a53f3ea-f8fa-48a2-8514-56d9517605d2.jsonl",
+    "approvalRequestId": "21a1bf65-aa3a-49fe-bffb-d18fdc723246",
+    "artifactId": "09c15106-840c-4c72-ba95-46491a7af446",
+    "artifactPath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-4DaewL/.opengtm/runtime/artifacts/global/09c15106-840c-4c72-ba95-46491a7af446.json",
     "nextAction": "Approve or deny the canonical CRM roundtrip outreach draft, then inspect CRM activity, traces, and feedback lineage."
   },
   "approval": {
     "action": "approve",
     "approval": {
-      "id": "7fca8d41-c7a1-468f-a2e8-b70bbfe98f58",
-      "createdAt": "2026-04-19T17:59:42.063Z",
-      "workspaceId": "4ba6a6b9-594e-452c-a75a-67bf5efdd688",
-      "workItemId": "bb52f171-58f2-416c-82d7-050685032131",
+      "id": "21a1bf65-aa3a-49fe-bffb-d18fdc723246",
+      "createdAt": "2026-04-19T18:05:35.354Z",
+      "workspaceId": "cfa4c7c0-8b92-49d7-bca8-c5caee21531a",
+      "workItemId": "97397a71-3777-406d-babf-4e0297b899a9",
       "lane": "ops-automate",
       "actionSummary": "Ops action requires approval: Draft outreach for CI Artifact Lead",
       "riskLevel": "critical",
       "target": "Draft outreach for CI Artifact Lead",
       "status": "approved",
-      "decisionRef": "32472d92-5603-4601-8182-c912bc90d38a"
+      "decisionRef": "0f3c5cf8-1c6c-435d-a534-e7a92f9aab88"
     },
     "workItem": {
-      "id": "bb52f171-58f2-416c-82d7-050685032131",
+      "id": "97397a71-3777-406d-babf-4e0297b899a9",
       "title": "Ops: Draft outreach for CI Artifact Lead",
       "status": "completed"
     },
     "trace": {
-      "id": "d206f4de-f6a9-4670-98d5-aeb6ae7cc824",
+      "id": "4a53f3ea-f8fa-48a2-8514-56d9517605d2",
       "status": "completed",
-      "logFilePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/logs/run-d206f4de-f6a9-4670-98d5-aeb6ae7cc824.jsonl"
+      "logFilePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-4DaewL/.opengtm/runtime/logs/run-4a53f3ea-f8fa-48a2-8514-56d9517605d2.jsonl"
     },
     "artifact": {
-      "id": "7cf254aa-9045-4177-8374-1ac671d84bb2",
-      "path": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/artifacts/global/7cf254aa-9045-4177-8374-1ac671d84bb2.json",
+      "id": "889a409e-0bda-48c9-9d0f-09ad5fb2ae7b",
+      "path": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-4DaewL/.opengtm/runtime/artifacts/global/889a409e-0bda-48c9-9d0f-09ad5fb2ae7b.json",
       "title": "Ops execution: Draft outreach for CI Artifact Lead"
     },
     "approvals": [
       {
-        "id": "7fca8d41-c7a1-468f-a2e8-b70bbfe98f58",
-        "createdAt": "2026-04-19T17:59:42.063Z",
-        "workspaceId": "4ba6a6b9-594e-452c-a75a-67bf5efdd688",
-        "workItemId": "bb52f171-58f2-416c-82d7-050685032131",
+        "id": "21a1bf65-aa3a-49fe-bffb-d18fdc723246",
+        "createdAt": "2026-04-19T18:05:35.354Z",
+        "workspaceId": "cfa4c7c0-8b92-49d7-bca8-c5caee21531a",
+        "workItemId": "97397a71-3777-406d-babf-4e0297b899a9",
         "lane": "ops-automate",
         "actionSummary": "Ops action requires approval: Draft outreach for CI Artifact Lead",
         "riskLevel": "critical",
         "target": "Draft outreach for CI Artifact Lead",
         "status": "approved",
-        "decisionRef": "32472d92-5603-4601-8182-c912bc90d38a"
+        "decisionRef": "0f3c5cf8-1c6c-435d-a534-e7a92f9aab88"
       }
     ],
     "summary": {
@@ -135,9 +135,9 @@
   },
   "trace": {
     "trace": {
-      "id": "d206f4de-f6a9-4670-98d5-aeb6ae7cc824",
-      "createdAt": "2026-04-19T17:59:42.061Z",
-      "workItemId": "bb52f171-58f2-416c-82d7-050685032131",
+      "id": "4a53f3ea-f8fa-48a2-8514-56d9517605d2",
+      "createdAt": "2026-04-19T18:05:35.352Z",
+      "workItemId": "97397a71-3777-406d-babf-4e0297b899a9",
       "workflowId": "crm.roundtrip",
       "lane": "ops-automate",
       "status": "completed",
@@ -161,8 +161,8 @@
       ],
       "persona": "SDR",
       "fixtureSetId": "crm-roundtrip",
-      "debugBundlePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/logs/run-d206f4de-f6a9-4670-98d5-aeb6ae7cc824.jsonl",
-      "logFilePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/logs/run-d206f4de-f6a9-4670-98d5-aeb6ae7cc824.jsonl",
+      "debugBundlePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-4DaewL/.opengtm/runtime/logs/run-4a53f3ea-f8fa-48a2-8514-56d9517605d2.jsonl",
+      "logFilePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-4DaewL/.opengtm/runtime/logs/run-4a53f3ea-f8fa-48a2-8514-56d9517605d2.jsonl",
       "toolCalls": [],
       "connectorCalls": [
         {
@@ -172,15 +172,16 @@
           "target": "activities",
           "executionMode": "live",
           "supportTier": "live",
-          "crmActivityId": "e9a5f29a-66c3-4e24-ad86-110e14a823aa"
+          "crmActivityId": "716a62ae-105a-4d8c-b4d5-73441a09731a"
         }
       ],
       "policyDecisionIds": [],
       "artifactIds": [
-        "7cf254aa-9045-4177-8374-1ac671d84bb2"
+        "889a409e-0bda-48c9-9d0f-09ad5fb2ae7b",
+        "9d3aa316-aa34-4764-914f-757990969325"
       ],
       "feedbackEventIds": [
-        "1a8ff5e4-4a15-4e69-9d4d-eb67c23bc04d"
+        "e7cb2ddb-d4d3-4dcf-854e-6ef358091c75"
       ],
       "runAttemptId": null,
       "observedFacts": [
@@ -188,9 +189,9 @@
           "kind": "truthfulness",
           "scope": "ops-approval-resume",
           "supportTier": "live",
-          "approvalRequestId": "7fca8d41-c7a1-468f-a2e8-b70bbfe98f58",
-          "checkpointId": "9eb07b6f-a326-462c-b677-5e6cc6ccdd69-post-research",
-          "crmActivityId": "e9a5f29a-66c3-4e24-ad86-110e14a823aa"
+          "approvalRequestId": "21a1bf65-aa3a-49fe-bffb-d18fdc723246",
+          "checkpointId": "aea84e2f-71d3-4554-bb89-302da41e9e5e-post-research",
+          "crmActivityId": "716a62ae-105a-4d8c-b4d5-73441a09731a"
         },
         {
           "kind": "recovery-semantics",
@@ -207,21 +208,35 @@
             "crm-activity-log"
           ],
           "rollbackOutcome": "operator-intervention-required"
+        },
+        {
+          "kind": "rollback-preview",
+          "scope": "ops-approval-resume",
+          "artifactId": "9d3aa316-aa34-4764-914f-757990969325",
+          "candidateDeletionsByTable": {
+            "work_items": 1,
+            "run_traces": 1,
+            "artifacts": 2,
+            "memory_records": 0,
+            "policy_decisions": 1,
+            "approval_requests": 1,
+            "feedback_records": 1
+          }
         }
       ],
       "inferences": [],
       "actionRequests": [],
       "redactionMarkers": [],
-      "startedAt": "2026-04-19T17:59:42.061Z",
-      "endedAt": "2026-04-19T17:59:42.123Z"
+      "startedAt": "2026-04-19T18:05:35.352Z",
+      "endedAt": "2026-04-19T18:05:35.478Z"
     },
     "workItem": {
-      "id": "bb52f171-58f2-416c-82d7-050685032131",
-      "createdAt": "2026-04-19T17:59:42.061Z",
-      "workspaceId": "4ba6a6b9-594e-452c-a75a-67bf5efdd688",
-      "initiativeId": "49a8c286-6fae-48af-b9c0-c2d21736c4cd",
+      "id": "97397a71-3777-406d-babf-4e0297b899a9",
+      "createdAt": "2026-04-19T18:05:35.351Z",
+      "workspaceId": "cfa4c7c0-8b92-49d7-bca8-c5caee21531a",
+      "initiativeId": "0a193f2e-7a22-4a43-a281-6b8c41a555b4",
       "workflowId": "crm.roundtrip",
-      "workflowRunId": "9eb07b6f-a326-462c-b677-5e6cc6ccdd69",
+      "workflowRunId": "aea84e2f-71d3-4554-bb89-302da41e9e5e",
       "journeyId": null,
       "ownerLane": "ops-automate",
       "title": "Ops: Draft outreach for CI Artifact Lead",
@@ -233,22 +248,23 @@
       "constraints": [],
       "requiredOutputs": [],
       "sourceIds": [
-        "de06acd1-fca6-4e40-b998-092603f0bcab",
-        "40af7f16-eeda-4ef3-809b-03811ff99223"
+        "1fa35e4b-933e-4562-82c8-225fdc7b9cf8",
+        "4c3523e1-9b00-4bd8-b3c1-126c0be6f393"
       ],
       "connectorTargets": [
-        "crm-db:/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/fixtures/opengtm-crm.sqlite",
-        "crm-lead:c979d02d-c1ee-4938-9fcd-4a6199e8ad52",
-        "checkpoint:9eb07b6f-a326-462c-b677-5e6cc6ccdd69-post-research"
+        "crm-db:/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-4DaewL/.opengtm/runtime/fixtures/opengtm-crm.sqlite",
+        "crm-lead:68ac6631-ab73-4207-9a40-be0d8fa6f50b",
+        "checkpoint:aea84e2f-71d3-4554-bb89-302da41e9e5e-post-research",
+        "checkpoint-at:2026-04-19T18:05:35.350Z"
       ]
     },
     "feedback": [
       {
-        "id": "1a8ff5e4-4a15-4e69-9d4d-eb67c23bc04d",
-        "createdAt": "2026-04-19T17:59:42.118Z",
-        "workspaceId": "4ba6a6b9-594e-452c-a75a-67bf5efdd688",
-        "traceId": "d206f4de-f6a9-4670-98d5-aeb6ae7cc824",
-        "approvalRequestId": "7fca8d41-c7a1-468f-a2e8-b70bbfe98f58",
+        "id": "e7cb2ddb-d4d3-4dcf-854e-6ef358091c75",
+        "createdAt": "2026-04-19T18:05:35.467Z",
+        "workspaceId": "cfa4c7c0-8b92-49d7-bca8-c5caee21531a",
+        "traceId": "4a53f3ea-f8fa-48a2-8514-56d9517605d2",
+        "approvalRequestId": "21a1bf65-aa3a-49fe-bffb-d18fdc723246",
         "artifactId": null,
         "workflowId": "crm.roundtrip",
         "persona": "SDR",
@@ -265,9 +281,9 @@
   "replay": {
     "mode": "deterministic-replay",
     "trace": {
-      "id": "d206f4de-f6a9-4670-98d5-aeb6ae7cc824",
-      "createdAt": "2026-04-19T17:59:42.061Z",
-      "workItemId": "bb52f171-58f2-416c-82d7-050685032131",
+      "id": "4a53f3ea-f8fa-48a2-8514-56d9517605d2",
+      "createdAt": "2026-04-19T18:05:35.352Z",
+      "workItemId": "97397a71-3777-406d-babf-4e0297b899a9",
       "workflowId": "crm.roundtrip",
       "lane": "ops-automate",
       "status": "completed",
@@ -291,8 +307,8 @@
       ],
       "persona": "SDR",
       "fixtureSetId": "crm-roundtrip",
-      "debugBundlePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/logs/run-d206f4de-f6a9-4670-98d5-aeb6ae7cc824.jsonl",
-      "logFilePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/logs/run-d206f4de-f6a9-4670-98d5-aeb6ae7cc824.jsonl",
+      "debugBundlePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-4DaewL/.opengtm/runtime/logs/run-4a53f3ea-f8fa-48a2-8514-56d9517605d2.jsonl",
+      "logFilePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-4DaewL/.opengtm/runtime/logs/run-4a53f3ea-f8fa-48a2-8514-56d9517605d2.jsonl",
       "toolCalls": [],
       "connectorCalls": [
         {
@@ -302,15 +318,16 @@
           "target": "activities",
           "executionMode": "live",
           "supportTier": "live",
-          "crmActivityId": "e9a5f29a-66c3-4e24-ad86-110e14a823aa"
+          "crmActivityId": "716a62ae-105a-4d8c-b4d5-73441a09731a"
         }
       ],
       "policyDecisionIds": [],
       "artifactIds": [
-        "7cf254aa-9045-4177-8374-1ac671d84bb2"
+        "889a409e-0bda-48c9-9d0f-09ad5fb2ae7b",
+        "9d3aa316-aa34-4764-914f-757990969325"
       ],
       "feedbackEventIds": [
-        "1a8ff5e4-4a15-4e69-9d4d-eb67c23bc04d"
+        "e7cb2ddb-d4d3-4dcf-854e-6ef358091c75"
       ],
       "runAttemptId": null,
       "observedFacts": [
@@ -318,9 +335,9 @@
           "kind": "truthfulness",
           "scope": "ops-approval-resume",
           "supportTier": "live",
-          "approvalRequestId": "7fca8d41-c7a1-468f-a2e8-b70bbfe98f58",
-          "checkpointId": "9eb07b6f-a326-462c-b677-5e6cc6ccdd69-post-research",
-          "crmActivityId": "e9a5f29a-66c3-4e24-ad86-110e14a823aa"
+          "approvalRequestId": "21a1bf65-aa3a-49fe-bffb-d18fdc723246",
+          "checkpointId": "aea84e2f-71d3-4554-bb89-302da41e9e5e-post-research",
+          "crmActivityId": "716a62ae-105a-4d8c-b4d5-73441a09731a"
         },
         {
           "kind": "recovery-semantics",
@@ -337,21 +354,35 @@
             "crm-activity-log"
           ],
           "rollbackOutcome": "operator-intervention-required"
+        },
+        {
+          "kind": "rollback-preview",
+          "scope": "ops-approval-resume",
+          "artifactId": "9d3aa316-aa34-4764-914f-757990969325",
+          "candidateDeletionsByTable": {
+            "work_items": 1,
+            "run_traces": 1,
+            "artifacts": 2,
+            "memory_records": 0,
+            "policy_decisions": 1,
+            "approval_requests": 1,
+            "feedback_records": 1
+          }
         }
       ],
       "inferences": [],
       "actionRequests": [],
       "redactionMarkers": [],
-      "startedAt": "2026-04-19T17:59:42.061Z",
-      "endedAt": "2026-04-19T17:59:42.123Z"
+      "startedAt": "2026-04-19T18:05:35.352Z",
+      "endedAt": "2026-04-19T18:05:35.478Z"
     },
     "workItem": {
-      "id": "bb52f171-58f2-416c-82d7-050685032131",
-      "createdAt": "2026-04-19T17:59:42.061Z",
-      "workspaceId": "4ba6a6b9-594e-452c-a75a-67bf5efdd688",
-      "initiativeId": "49a8c286-6fae-48af-b9c0-c2d21736c4cd",
+      "id": "97397a71-3777-406d-babf-4e0297b899a9",
+      "createdAt": "2026-04-19T18:05:35.351Z",
+      "workspaceId": "cfa4c7c0-8b92-49d7-bca8-c5caee21531a",
+      "initiativeId": "0a193f2e-7a22-4a43-a281-6b8c41a555b4",
       "workflowId": "crm.roundtrip",
-      "workflowRunId": "9eb07b6f-a326-462c-b677-5e6cc6ccdd69",
+      "workflowRunId": "aea84e2f-71d3-4554-bb89-302da41e9e5e",
       "journeyId": null,
       "ownerLane": "ops-automate",
       "title": "Ops: Draft outreach for CI Artifact Lead",
@@ -363,22 +394,23 @@
       "constraints": [],
       "requiredOutputs": [],
       "sourceIds": [
-        "de06acd1-fca6-4e40-b998-092603f0bcab",
-        "40af7f16-eeda-4ef3-809b-03811ff99223"
+        "1fa35e4b-933e-4562-82c8-225fdc7b9cf8",
+        "4c3523e1-9b00-4bd8-b3c1-126c0be6f393"
       ],
       "connectorTargets": [
-        "crm-db:/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/fixtures/opengtm-crm.sqlite",
-        "crm-lead:c979d02d-c1ee-4938-9fcd-4a6199e8ad52",
-        "checkpoint:9eb07b6f-a326-462c-b677-5e6cc6ccdd69-post-research"
+        "crm-db:/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-4DaewL/.opengtm/runtime/fixtures/opengtm-crm.sqlite",
+        "crm-lead:68ac6631-ab73-4207-9a40-be0d8fa6f50b",
+        "checkpoint:aea84e2f-71d3-4554-bb89-302da41e9e5e-post-research",
+        "checkpoint-at:2026-04-19T18:05:35.350Z"
       ]
     },
     "feedback": [
       {
-        "id": "1a8ff5e4-4a15-4e69-9d4d-eb67c23bc04d",
-        "createdAt": "2026-04-19T17:59:42.118Z",
-        "workspaceId": "4ba6a6b9-594e-452c-a75a-67bf5efdd688",
-        "traceId": "d206f4de-f6a9-4670-98d5-aeb6ae7cc824",
-        "approvalRequestId": "7fca8d41-c7a1-468f-a2e8-b70bbfe98f58",
+        "id": "e7cb2ddb-d4d3-4dcf-854e-6ef358091c75",
+        "createdAt": "2026-04-19T18:05:35.467Z",
+        "workspaceId": "cfa4c7c0-8b92-49d7-bca8-c5caee21531a",
+        "traceId": "4a53f3ea-f8fa-48a2-8514-56d9517605d2",
+        "approvalRequestId": "21a1bf65-aa3a-49fe-bffb-d18fdc723246",
         "artifactId": null,
         "workflowId": "crm.roundtrip",
         "persona": "SDR",
@@ -416,11 +448,11 @@
       "isCanonical": true
     },
     "workflowRun": {
-      "id": "6030005b-7ec7-49c6-b424-d75df3832982",
+      "id": "713c23d3-68fc-43ed-97ad-51410db0ab36",
       "status": "awaiting-approval"
     },
     "workflowId": "crm.roundtrip",
-    "workflowRunId": "6030005b-7ec7-49c6-b424-d75df3832982",
+    "workflowRunId": "713c23d3-68fc-43ed-97ad-51410db0ab36",
     "lane": "ops-automate",
     "workflowState": "awaiting-approval",
     "persona": "SDR",
@@ -428,11 +460,11 @@
     "supportTier": "live",
     "isCanonical": true,
     "canonicalScenarioId": "crm.roundtrip",
-    "traceId": "d0e463a0-1a0f-4c25-93de-eb8a1c093631",
-    "logFilePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/logs/run-d0e463a0-1a0f-4c25-93de-eb8a1c093631.jsonl",
-    "approvalRequestId": "c4caa072-2fe4-46f8-836c-0a70c05429b5",
-    "artifactId": "cb828619-3ea9-4273-a0ed-eb5ad12f6cba",
-    "artifactPath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-RM17f5/.opengtm/runtime/artifacts/global/cb828619-3ea9-4273-a0ed-eb5ad12f6cba.json",
+    "traceId": "0ad7c757-bbf4-41d8-bacc-7fef002da03c",
+    "logFilePath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-4DaewL/.opengtm/runtime/logs/run-0ad7c757-bbf4-41d8-bacc-7fef002da03c.jsonl",
+    "approvalRequestId": "5c695fd0-3dda-4cb5-b87a-a0eb8f7914d3",
+    "artifactId": "c995cbf7-8380-4a97-b1f7-86cdc5a89062",
+    "artifactPath": "/private/var/folders/sx/_p5d2mn10q56tdsxxsp0lbsc0000gn/T/opengtm-ci-report-4DaewL/.opengtm/runtime/artifacts/global/c995cbf7-8380-4a97-b1f7-86cdc5a89062.json",
     "nextAction": "Approve or deny the canonical CRM roundtrip outreach draft, then inspect CRM activity, traces, and feedback lineage."
   }
 }

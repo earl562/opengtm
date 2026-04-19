@@ -143,6 +143,13 @@ describe('cli workflows', () => {
       canonicalScenarioId: 'crm.roundtrip',
       pass: true
     })
+
+    const longitudinal = await handleEvals({ suite: 'longitudinal' })
+    expect(longitudinal).toMatchObject({
+      suite: 'longitudinal',
+      canonicalScenarioId: 'crm.roundtrip',
+      pass: true
+    })
   })
 
   it('logs CRM activity when live outreach compose is approved', async () => {

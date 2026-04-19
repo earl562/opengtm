@@ -85,6 +85,11 @@ describe('canonical crm roundtrip', () => {
       crmActivityId: expect.any(String),
       supportTier: 'live'
     })
+
+    const recoveryReports = listRecords<any>(daemon.storage, 'artifacts').filter(
+      (item) => item.kind === 'reconciliation-report'
+    )
+    expect(recoveryReports.length).toBeGreaterThan(0)
   })
 
   it('logs denied canonical workflow outcomes back to the local CRM fixture', async () => {
@@ -129,5 +134,10 @@ describe('canonical crm roundtrip', () => {
         })
       ])
     )
+
+    const recoveryReports = listRecords<any>(daemon.storage, 'artifacts').filter(
+      (item) => item.kind === 'reconciliation-report'
+    )
+    expect(recoveryReports.length).toBeGreaterThan(0)
   })
 })

@@ -42,7 +42,8 @@ export async function handleLiveLeadResearchWorkflow(args: {
     connectorTargets: [
       `crm-db:${bootstrap.crmDbFile}`,
       `crm-lead:${bootstrap.lead.id}`,
-      `checkpoint:${bootstrap.checkpoint.id}`
+      `checkpoint:${bootstrap.checkpoint.id}`,
+      `checkpoint-at:${bootstrap.checkpoint.createdAt}`
     ],
     supportTier: 'live',
     checkpointId: bootstrap.checkpoint.id
@@ -89,7 +90,8 @@ export async function handleLiveOutreachComposeWorkflow(args: {
     connectorTargets: [
       `crm-db:${bootstrap.crmDbFile}`,
       `crm-lead:${bootstrap.lead.id}`,
-      `checkpoint:${bootstrap.checkpoint.id}`
+      `checkpoint:${bootstrap.checkpoint.id}`,
+      `checkpoint-at:${bootstrap.checkpoint.createdAt}`
     ],
     supportTier: 'live'
   })

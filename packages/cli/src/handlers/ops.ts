@@ -19,6 +19,7 @@ import type {
 } from '@opengtm/types'
 import type { OpenGtmAutonomyMode } from '../autonomy.js'
 import { createCanonicalActivity, parseCanonicalConnectorTargets } from '../canonical-crm.js'
+import { writeRecoveryArtifact } from '../recovery.js'
 
 const OPS_LOCAL_SUPPORT_TIER = 'live'
 
@@ -132,6 +133,36 @@ export async function continueApprovedOpsWorkflow(args: {
   upsertRecord(args.daemon.storage, 'artifacts', storedArtifact)
 
   const completedWorkItem = transitionWorkItem(runningWorkItem, 'completed')
+  const recoveryReport = writeRecoveryArtifact({
+    storage: args.daemon.storage,
+    workspaceId: args.workItem.workspaceId,
+    initiativeId: args.workItem.initiativeId,
+    lane: args.workItem.ownerLane,
+    title: `Recovery report: ${args.workItem.goal}`,
+    traceRef: runningTrace.id,
+    sourceIds: [args.approval.id, storedArtifact.id],
+    provenance: [
+      'opengtm:recovery-report',
+      `approval:${args.approval.id}`,
+      'support-tier:live'
+    ],
+    checkpoint: canonicalContext.checkpointId
+      ? {
+          id: canonicalContext.checkpointId,
+          createdAt: canonicalContext.checkpointCreatedAt || args.approval.createdAt
+        }
+      : null,
+    payload: {
+      decision: 'approved',
+      canonicalScenarioId: runningTrace.workflowId,
+      crmActivityId,
+      recoverySemantics: {
+        reversibleEffects: ['research-artifact', 'approval-artifact'],
+        resumableEffects: ['approval-gate', 'draft-review'],
+        operatorInterventionRequired: crmActivityId ? ['crm-activity-log'] : []
+      }
+    }
+  })
   const completedTrace = updateRunTrace(runningTrace, {
     status: 'completed',
     connectorCalls: crmActivityId
@@ -164,6 +195,12 @@ export async function continueApprovedOpsWorkflow(args: {
         resumableEffects: ['approval-gate', 'draft-review'],
         operatorInterventionRequired: crmActivityId ? ['crm-activity-log'] : [],
         rollbackOutcome: crmActivityId ? 'operator-intervention-required' : 'not-invoked'
+      },
+      {
+        kind: 'rollback-preview',
+        scope: 'ops-approval-resume',
+        artifactId: recoveryReport.artifact.id,
+        candidateDeletionsByTable: recoveryReport.rollbackPreview?.candidateDeletionsByTable ?? {}
       }
     ],
     steps: [
@@ -172,7 +209,7 @@ export async function continueApprovedOpsWorkflow(args: {
       { name: 'approve-or-send', status: 'completed' },
       { name: 'record-outcome', status: 'completed' }
     ],
-    artifactIds: [...runningTrace.artifactIds, storedArtifact.id],
+    artifactIds: [...runningTrace.artifactIds, storedArtifact.id, recoveryReport.artifact.id],
     endedAt: new Date().toISOString()
   })
 

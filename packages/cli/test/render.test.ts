@@ -173,4 +173,17 @@ describe("cli rendering", () => {
 		expect(output).toContain("transferability:");
 		expect(output).toContain("Ablation deltas");
 	});
+
+	it("renders longitudinal eval dimensions and pass state", async () => {
+		const result = await handleEvals({ suite: "longitudinal" });
+		const output = renderCliOutput({
+			parsed: parseCliArgs(["evals", "run", "longitudinal"]),
+			result,
+		});
+
+		expect(output).toContain("suite: longitudinal");
+		expect(output).toContain("pass: true");
+		expect(output).toContain("successRate:");
+		expect(output).toContain("rerunContinuity:");
+	});
 });

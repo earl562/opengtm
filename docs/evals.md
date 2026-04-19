@@ -9,6 +9,7 @@ opengtm evals run smoke
 opengtm evals run runtime
 opengtm evals run ablations
 opengtm evals run canonical
+opengtm evals run longitudinal
 ```
 
 ## Trace debugging
@@ -42,3 +43,4 @@ npm run smoke:install:cli
 - workflow/persona/fixture metadata on traces
 - replay behavior for workflow-backed traces
 - canonical score thresholds for transferability, maintainability, recovery robustness, context efficiency, and governance quality
+- longitudinal stability metrics across repeated canonical runs
