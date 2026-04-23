@@ -246,6 +246,19 @@ export const OPEN_GTM_WORK_ITEM_STATUSES = [
 
 export type OpenGtmWorkItemStatus = typeof OPEN_GTM_WORK_ITEM_STATUSES[number]
 
+// === Agent Job Statuses ===
+export const OPEN_GTM_AGENT_JOB_STATUSES = [
+  'queued',
+  'running',
+  'blocked',
+  'awaiting-approval',
+  'completed',
+  'failed',
+  'cancelled'
+] as const
+
+export type OpenGtmAgentJobStatus = typeof OPEN_GTM_AGENT_JOB_STATUSES[number]
+
 // === Approval Statuses ===
 export const OPEN_GTM_APPROVAL_STATUSES = [
   'pending',
@@ -295,6 +308,16 @@ export const OPEN_GTM_WORK_ITEM_TRANSITIONS: Record<OpenGtmWorkItemStatus, OpenG
   running: ['awaiting-approval', 'blocked', 'completed', 'failed', 'cancelled'],
   blocked: ['queued', 'cancelled', 'failed'],
   'awaiting-approval': ['queued', 'cancelled', 'failed'],
+  completed: [],
+  failed: ['queued', 'cancelled'],
+  cancelled: []
+}
+
+export const OPEN_GTM_AGENT_JOB_TRANSITIONS: Record<OpenGtmAgentJobStatus, OpenGtmAgentJobStatus[]> = {
+  queued: ['running', 'cancelled', 'awaiting-approval', 'blocked'],
+  running: ['awaiting-approval', 'blocked', 'completed', 'failed', 'cancelled'],
+  blocked: ['queued', 'running', 'cancelled', 'failed'],
+  'awaiting-approval': ['queued', 'running', 'cancelled', 'failed'],
   completed: [],
   failed: ['queued', 'cancelled'],
   cancelled: []

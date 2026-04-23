@@ -1,66 +1,80 @@
-# Demo: OpenGTM (CLI-first)
+# Demo: OpenGTM CLI
 
-## Prereqs
-- Node.js >= 22
+This is the shortest end-to-end manual demo for a first-time evaluator.
 
-## Run the demo
+## 1. Start clean
 
 ```bash
-git clone https://github.com/earl562/opengtm opengtm
+git clone https://github.com/earl562/opengtm.git
 cd opengtm
 
 npm ci
-npm -w @opengtm/cli run build
-
+npm run build
 rm -rf .opengtm
-node packages/cli/bin/opengtm.js init --name=Demo
-
-# Research lane (creates a trace + artifact + working-memory record)
-node packages/cli/bin/opengtm.js run research "Find top 3 competitors"
-node packages/cli/bin/opengtm.js traces list
-node packages/cli/bin/opengtm.js traces show <trace-id>
-node packages/cli/bin/opengtm.js artifacts list
-node packages/cli/bin/opengtm.js memory list
-
-# Build lane (creates policy decision + approval request)
-node packages/cli/bin/opengtm.js run build "Change README"
-node packages/cli/bin/opengtm.js approvals list
-
-# Workflow catalog + public workflow runs
-node packages/cli/bin/opengtm.js workflow
-node packages/cli/bin/opengtm.js run workflow crm.roundtrip "Pat Example"
-node packages/cli/bin/opengtm.js approvals list
-node packages/cli/bin/opengtm.js approvals approve <approval-id>
-
-# Eval and replay surfaces
-node packages/cli/bin/opengtm.js evals run smoke
-node packages/cli/bin/opengtm.js evals run canonical
-node packages/cli/bin/opengtm.js traces replay <trace-id>
-node packages/cli/bin/opengtm.js traces rerun <trace-id>
 ```
 
-## Logs
-Each CLI run writes a per-run JSONL log under the runtime root:
+## 2. Open the CLI shell
 
-- Default runtime root: `./.opengtm/runtime` (configurable via `.opengtm/config.json` `runtimeDir`)
-- Log directory: `./.opengtm/runtime/logs/`
-- Per-run file: `run-<traceId>.jsonl`
+```bash
+node packages/cli/bin/opengtm.js
+# inside the session try:
+# Research Acme
+# Show approvals
+# Why was this blocked?
+# /exit
 
-Traces persist the absolute `logFilePath` so you can link a trace to its JSONL file.
+node packages/cli/bin/opengtm.js help --json
+```
 
-## Discord (optional)
-The Discord gateway is a separate package. It registers `/opengtm` commands and emits gateway events.
+## 3. Initialize a workspace
 
-You need:
-- Discord bot token
-- Discord application client id
-- optional: guild id (recommended during development)
+```bash
+node packages/cli/bin/opengtm.js init --name="Demo Workspace" --initiative="Canonical Flow"
+node packages/cli/bin/opengtm.js status
+```
 
-The gateway supports:
-- `/opengtm help`
-- `/opengtm status`
-- `/opengtm init`
-- `/opengtm run lane:<research|build|ops> goal:<...>`
-- `/opengtm approvals`
+## 4. Configure the control plane
 
-Approvals are rendered with Approve/Deny buttons.
+```bash
+node packages/cli/bin/opengtm.js auth login openai --no-open
+node packages/cli/bin/opengtm.js provider use openai
+node packages/cli/bin/opengtm.js models list
+node packages/cli/bin/opengtm.js sandbox status
+node packages/cli/bin/opengtm.js sandbox explain --profile read-only
+```
+
+## 5. Run the GTM workflow
+
+```bash
+node packages/cli/bin/opengtm.js
+# then inside the session:
+# Research Pat Example
+# Show approvals
+# /approve <approval-id>
+# /traces
+
+node packages/cli/bin/opengtm.js workflow list
+node packages/cli/bin/opengtm.js workflow run crm.roundtrip "Pat Example"
+node packages/cli/bin/opengtm.js approvals list
+node packages/cli/bin/opengtm.js approvals approve <approval-id>
+node packages/cli/bin/opengtm.js traces list
+node packages/cli/bin/opengtm.js traces replay <trace-id>
+```
+
+## 6. Inspect extension surfaces
+
+```bash
+node packages/cli/bin/opengtm.js skill list
+node packages/cli/bin/opengtm.js skill new outbound_followup
+node packages/cli/bin/opengtm.js agent list
+node packages/cli/bin/opengtm.js agent new research_assistant
+node packages/cli/bin/opengtm.js learn review
+```
+
+## 7. Evaluate the harness
+
+```bash
+node packages/cli/bin/opengtm.js evals run canonical
+node packages/cli/bin/opengtm.js evals run longitudinal
+node packages/cli/bin/opengtm.js smoke
+```

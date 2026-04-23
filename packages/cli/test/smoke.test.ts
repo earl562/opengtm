@@ -44,10 +44,10 @@ describe('smoke', () => {
     ])
   })
 
-  it('supports the top-level opengtm alias', async () => {
+  it('supports the top-level smoke alias', async () => {
     const router = createCliRouter()
 
-    const aliasResult = await router(['opengtm'])
+    const aliasResult = await router(['smoke'])
     const canonicalResult = await router(['run', 'opengtm'])
 
     expect(aliasResult).toEqual(canonicalResult)

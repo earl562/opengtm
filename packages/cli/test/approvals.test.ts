@@ -6,6 +6,7 @@ import { getRecord, readArtifactBlob } from "@opengtm/storage";
 import { describe, expect, it } from "vitest";
 import { handleApprovals } from "../src/handlers/approvals.js";
 import { handleBuildRun } from "../src/handlers/build.js";
+import { handleOpsRun } from "../src/handlers/ops.js";
 import { parseCliArgs } from "../src/parse.js";
 import { renderCliOutput } from "../src/render/index.js";
 
@@ -228,5 +229,107 @@ describe("cli approvals handler", () => {
 		).rejects.toThrow(
 			"Invalid OpenGTM approval transition from approved to denied",
 		);
+	});
+
+	it("uses lane-truthful continuation language for ops approvals", async () => {
+		const daemon = createLocalDaemon({
+			rootDir: mkdtempSync(join(tmpdir(), "opengtm-approvals-ops-")),
+		});
+		const ops = await handleOpsRun({
+			daemon,
+			goal: "compose outbound for Acme",
+			workspaceId: "w1",
+			initiativeId: "i1",
+			workflowId: "sdr.outreach_compose",
+			workflowRunId: "ops-run-1",
+			persona: "SDR",
+			fixtureSetId: "sdr-outreach-compose",
+			requiresApproval: true,
+		});
+
+		if (!ops.approvalRequestId) {
+			throw new Error("Expected approval request id after ops run");
+		}
+
+		const pendingTrace = getRecord<import("@opengtm/types").OpenGtmRunTrace>(
+			daemon.storage,
+			"run_traces",
+			ops.traceId,
+		);
+		expect(pendingTrace?.status).toBe("awaiting-approval");
+		expect(pendingTrace?.steps.map((step) => step.name)).toEqual([
+			"plan",
+			"observe",
+			"act",
+			"reflect",
+		]);
+		expect(pendingTrace?.steps[2]?.status).toBe("awaiting-approval");
+		expect(pendingTrace?.policyDecisionIds).toHaveLength(1);
+		expect(pendingTrace?.artifactIds).toContain(ops.artifactId);
+		expect(pendingTrace?.observedFacts).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					kind: "harness-loop",
+					approvalsRequested: 1,
+				}),
+			]),
+		);
+
+		const result = await handleApprovals({
+			daemon,
+			action: "approve",
+			id: ops.approvalRequestId,
+		});
+
+		expect(result.summary.nextAction).toContain("ops workflow resumed");
+		expect(result.artifact?.id).toBeTypeOf("string");
+		const resumedTrace = getRecord<import("@opengtm/types").OpenGtmRunTrace>(
+			daemon.storage,
+			"run_traces",
+			ops.traceId,
+		);
+		expect(resumedTrace?.status).toBe("completed");
+		expect(resumedTrace?.policyDecisionIds).toHaveLength(1);
+		expect(resumedTrace?.artifactIds).toEqual(
+			expect.arrayContaining([ops.artifactId, result.artifact?.id]),
+		);
+		expect(resumedTrace?.observedFacts).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					kind: "recovery-semantics",
+				}),
+				expect.objectContaining({
+					kind: "rollback-preview",
+				}),
+			]),
+		);
+		expect(result.artifact?.path).toBeTypeOf("string");
+		if (!result.artifact?.path) {
+			throw new Error("Expected resumed artifact path for approved ops workflow");
+		}
+		expect(readArtifactBlob(result.artifact.path, { parseJson: true })).toMatchObject({
+			approvalRequestId: ops.approvalRequestId,
+			policyDecisionId: pendingTrace?.policyDecisionIds?.[0] || null,
+			sourceArtifactIds: expect.arrayContaining([ops.artifactId]),
+		});
+		const recoveryArtifactId = resumedTrace?.artifactIds.find(
+			(id) => id !== ops.artifactId && id !== result.artifact?.id,
+		);
+		const recoveryArtifact = recoveryArtifactId
+			? getRecord<import("@opengtm/types").OpenGtmArtifactRecord>(
+					daemon.storage,
+					"artifacts",
+					recoveryArtifactId,
+				)
+			: null;
+		expect(recoveryArtifact?.contentRef).toBeTypeOf("string");
+		if (!recoveryArtifact?.contentRef) {
+			throw new Error("Expected recovery artifact content for approved ops workflow");
+		}
+		expect(readArtifactBlob(recoveryArtifact.contentRef, { parseJson: true })).toMatchObject({
+			approvalRequestId: ops.approvalRequestId,
+			policyDecisionId: pendingTrace?.policyDecisionIds?.[0] || null,
+			sourceArtifactIds: expect.arrayContaining([ops.artifactId]),
+		});
 	});
 });

@@ -16,13 +16,19 @@ The current north-star claim surface is **`crm.roundtrip`**:
 That canonical slice now runs as a local-first **`live`** path. Two SDR workflows now reuse the same substrate:
 - `sdr.lead_research` (**live**)
 - `sdr.outreach_compose` (**live**)
+Additional account-lifecycle workflows now run on the same local-first runtime substrate:
+- `cs.health_score` (**live**)
+- `cs.renewal_prep` (**live**)
+- `ae.expansion_signal` (**live**)
+- `ae.account_brief` (**live**)
+- `ae.deal_risk_scan` (**live**)
 
 The remaining GTM workflow catalog stays **reference-only** by default until it is backed by the same runtime/recovery substrate.
 
 ## Catalog
 
 ```bash
-opengtm workflow
+opengtm workflow list
 ```
 
 Current reference workflows:
@@ -30,22 +36,32 @@ Current reference workflows:
 - `sdr.inbound_triage`
 - `sdr.lead_research` (**live**)
 - `sdr.outreach_compose` (**live**)
+- `ae.account_brief` (**live**)
+- `ae.deal_risk_scan` (**live**)
+- `ae.expansion_signal` (**live**)
+- `cs.renewal_prep` (**live**)
+- `cs.health_score` (**live**)
 - `sdr.outreach_sequence`
-- `ae.account_brief`
-- `ae.deal_risk_scan`
-- `ae.expansion_signal`
-- `cs.renewal_prep`
-- `cs.health_score`
 - `de.usage_analytics`
 
-`crm.roundtrip` is the current claim-bearing path. `sdr.lead_research` and `sdr.outreach_compose` are now live secondary workflows on the same local CRM substrate. The remaining workflows currently render as `reference-only` catalog entries. They are still useful for scaffolding, traces, docs, and fixtures, but they are not yet the claim-bearing public runtime path.
+`crm.roundtrip` is the current claim-bearing path. `sdr.lead_research`, `sdr.outreach_compose`, `cs.health_score`, `cs.renewal_prep`, `ae.expansion_signal`, `ae.account_brief`, and `ae.deal_risk_scan` are now live secondary workflows on the same local-first substrate. The remaining workflows currently render as `reference-only` catalog entries. They are still useful for scaffolding, traces, docs, and fixtures, but they are not yet the claim-bearing public runtime path.
 
 ## Run a workflow
 
 ```bash
-opengtm run workflow sdr.lead_research "research Acme expansion"
-opengtm run workflow sdr.outreach_compose "draft first touch for Acme"
-opengtm run workflow crm.roundtrip "Pat Example"
+opengtm workflow run sdr.lead_research "research Acme expansion"
+opengtm workflow run sdr.outreach_compose "draft first touch for Acme"
+opengtm workflow run crm.roundtrip "Pat Example"
+```
+
+## Agentic harness run
+
+The agentic GTM harness creates a durable orchestrator job plus bounded stage jobs for preflight safety, research, account intelligence, approval-ready drafting, and feedback learning. It persists the delegation ledger, trace, approval request, and run artifact locally.
+
+```bash
+opengtm agent harness run "Research Acme inbound lead and draft safe follow-up"
+opengtm agent job list
+opengtm approvals list
 ```
 
 ## Workflow behavior

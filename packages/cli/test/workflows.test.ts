@@ -19,8 +19,8 @@ describe('cli workflows', () => {
 
     const catalog = await handleWorkflowCatalog()
     expect(catalog.summary.total).toBeGreaterThan(0)
-    expect(catalog.summary.bySupportTier?.['reference-only']).toBe(catalog.summary.total - 3)
-    expect(catalog.summary.bySupportTier?.live).toBe(3)
+    expect(catalog.summary.bySupportTier?.['reference-only'] || 0).toBe(0)
+    expect(catalog.summary.bySupportTier?.live).toBe(11)
     expect(catalog.summary.canonicalScenarioId).toBe('crm.roundtrip')
 
     const result = await handleWorkflowRun({
@@ -37,19 +37,61 @@ describe('cli workflows', () => {
     expect(result.canonicalScenarioId).toBeNull()
     expect(result.traceId).toBeTypeOf('string')
     expect(result.artifactId).toBeTypeOf('string')
+    expect(result.memoryId).toBeTypeOf('string')
+    expect(result.logFilePath).toBeTypeOf('string')
 
     const trace = getRecord<any>(daemon.storage, 'run_traces', result.traceId!)
     expect(trace.workflowId).toBe('sdr.lead_research')
     expect(trace.persona).toBe('SDR')
     expect(trace.fixtureSetId).toBe('sdr-lead-research')
-    expect(trace.observedFacts).toEqual(
+    expect(trace.status).toBe('completed')
+    expect(trace.logFilePath).toBe(result.logFilePath)
+    expect(trace.steps.map((step: any) => step.name)).toEqual(['plan', 'observe', 'act', 'reflect'])
+    expect(trace.connectorCalls).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          kind: 'truthfulness',
+          action: 'read-connector',
           supportTier: 'live'
         })
       ])
     )
+    expect(trace.observedFacts).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: 'truthfulness',
+          supportTier: 'live',
+          checkpointId: expect.any(String)
+        }),
+        expect.objectContaining({
+          kind: 'harness-loop',
+          loopStatus: 'stopped',
+          providerId: expect.any(String)
+        })
+      ])
+    )
+
+    const dealRisk = await handleWorkflowRun({
+      daemon,
+      workflowId: 'ae.deal_risk_scan',
+      goal: 'scan deal risk for Acme',
+      workspaceId: 'w1',
+      initiativeId: 'i1'
+    })
+
+    expect(dealRisk.supportTier).toBe('live')
+    expect(dealRisk.artifactId).toBeTypeOf('string')
+
+    const sequence = await handleWorkflowRun({
+      daemon,
+      workflowId: 'sdr.outreach_sequence',
+      goal: 'sequence Acme follow-up',
+      workspaceId: 'w1',
+      initiativeId: 'i1'
+    })
+
+    expect(sequence.workflowState).toBe('awaiting-approval')
+    expect(sequence.supportTier).toBe('live')
+    expect(sequence.approvalRequestId).toBeTypeOf('string')
   })
 
   it('records feedback, shows trace detail, and replays a workflow trace', async () => {
@@ -132,6 +174,31 @@ describe('cli workflows', () => {
     expect(workflow.supportTier).toBe('live')
     expect(workflow.approvalRequestId).toBeTypeOf('string')
     expect(workflow.artifactId).toBeTypeOf('string')
+    const trace = getRecord<any>(daemon.storage, 'run_traces', workflow.traceId!)
+    const approval = getRecord<any>(daemon.storage, 'approval_requests', workflow.approvalRequestId!)
+    expect(trace?.status).toBe('awaiting-approval')
+    expect(trace?.steps.map((step: any) => step.name)).toEqual(['plan', 'observe', 'act', 'reflect'])
+    expect(trace?.steps[2]?.status).toBe('awaiting-approval')
+    expect(trace?.policyDecisionIds).toHaveLength(1)
+    expect(trace?.artifactIds).toContain(workflow.artifactId)
+    expect(trace?.connectorCalls).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          action: 'send-message',
+          supportTier: 'live',
+          connectorStatus: 'skipped-approval'
+        })
+      ])
+    )
+    expect(trace?.observedFacts).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: 'harness-loop',
+          approvalsRequested: 1
+        })
+      ])
+    )
+    expect(approval?.status).toBe('pending')
 
     const evals = await handleEvals({ suite: 'ablations' })
     expect(Array.isArray(evals.results)).toBe(true)

@@ -1,9 +1,9 @@
 # Package Map
 
-OpenGTM ships as a public monorepo with `@opengtm/cli` as the primary entrypoint.
+OpenGTM ships as a public monorepo with `opengtm` as the primary entrypoint.
 
 ## Public packages
-- `@opengtm/cli`: operator CLI and public reference workflows
+- `opengtm`: operator CLI and public reference workflows
 - `@opengtm/types`: shared GTM and harness types/constants
 - `@opengtm/core`: entity factories and state transitions
 - `@opengtm/storage`: sqlite-backed local runtime storage
@@ -25,6 +25,7 @@ OpenGTM ships as a public monorepo with `@opengtm/cli` as the primary entrypoint
 - CLI: `opengtm`
 - Workflow catalog: `opengtm workflow`
 - Workflow execution: `opengtm run workflow <workflow-id>`
+- Agentic GTM harness: `opengtm agent harness run "<goal>"`
 - Trace inspection: `opengtm traces list|show|replay|rerun`
 - Eval suites: `opengtm evals run <suite>`
 - Feedback ledger: `opengtm feedback list`

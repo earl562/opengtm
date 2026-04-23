@@ -10,9 +10,21 @@ import type {
   OpenGtmWorkflowRunResult
 } from '@opengtm/types'
 import type { OpenGtmAutonomyMode } from '../autonomy.js'
+import type { OpenGtmSessionLineageState } from '../session-lineage.js'
 import { handleCanonicalCrmRoundtripRun } from './canonical.js'
 import { handleBuildRun } from './build.js'
-import { handleLiveLeadResearchWorkflow, handleLiveOutreachComposeWorkflow } from './live-workflows.js'
+import {
+  handleLiveAccountBriefWorkflow,
+  handleLiveDealRiskWorkflow,
+  handleLiveExpansionSignalWorkflow,
+  handleLiveHealthScoreWorkflow,
+  handleLiveInboundTriageWorkflow,
+  handleLiveLeadResearchWorkflow,
+  handleLiveOutreachComposeWorkflow,
+  handleLiveOutreachSequenceWorkflow,
+  handleLiveRenewalPrepWorkflow,
+  handleLiveUsageAnalyticsWorkflow
+} from './live-workflows.js'
 import { handleOpsRun } from './ops.js'
 import { handleResearchRun } from './research.js'
 import {
@@ -55,6 +67,7 @@ function normalizeWorkflowResult(args: {
     approvalRequestId: args.result.approvalRequestId || null,
     artifactId: args.result.artifactId || args.result.artifact?.id || null,
     artifactPath: args.result.artifactPath || args.result.artifact?.path || null,
+    memoryId: args.result.memoryId || null,
     nextAction: args.manifest.supportTier === 'reference-only'
       ? 'This workflow remains reference-only while the canonical CRM roundtrip slice is hardened. Review its artifacts as scaffolding, not as the claim-bearing public path.'
       : args.result.nextAction || summary.nextAction || 'Review the workflow artifacts and continue the operator flow.'
@@ -83,11 +96,13 @@ export async function handleWorkflowCatalog() {
 
 export async function handleWorkflowRun(args: {
   daemon: OpenGtmLocalDaemon
+  cwd?: string
   workflowId: string
   goal?: string
   workspaceId?: string
   initiativeId?: string
   autonomyMode?: OpenGtmAutonomyMode
+  sessionLineage?: OpenGtmSessionLineageState | null
 }) {
   const workflow = getReferenceWorkflow(args.workflowId)
   if (!workflow) {
@@ -126,6 +141,7 @@ export async function handleWorkflowRun(args: {
   if (workflow.id === OPEN_GTM_CANONICAL_SCENARIO_ID) {
     rawResult = await handleCanonicalCrmRoundtripRun({
       daemon: args.daemon,
+      cwd: args.cwd,
       workflowId: workflow.id,
       workflowRunId: workflowRun.id,
       goal,
@@ -137,28 +153,137 @@ export async function handleWorkflowRun(args: {
   } else if (workflow.id === 'sdr.lead_research') {
     rawResult = await handleLiveLeadResearchWorkflow({
       daemon: args.daemon,
+      cwd: args.cwd,
       workflowId: workflow.id,
       workflowRunId: workflowRun.id,
       goal,
       workspaceId,
       initiativeId: args.initiativeId,
       persona: workflow.persona,
-      fixtureSetId: workflow.fixtureSetId
+      fixtureSetId: workflow.fixtureSetId,
+      sessionLineage: args.sessionLineage
     })
   } else if (workflow.id === 'sdr.outreach_compose') {
     rawResult = await handleLiveOutreachComposeWorkflow({
       daemon: args.daemon,
+      cwd: args.cwd,
       workflowId: workflow.id,
       workflowRunId: workflowRun.id,
       goal,
       workspaceId,
       initiativeId: args.initiativeId,
       persona: workflow.persona,
-      fixtureSetId: workflow.fixtureSetId
+      fixtureSetId: workflow.fixtureSetId,
+      sessionLineage: args.sessionLineage
+    })
+  } else if (workflow.id === 'sdr.outreach_sequence') {
+    rawResult = await handleLiveOutreachSequenceWorkflow({
+      daemon: args.daemon,
+      cwd: args.cwd,
+      workflowId: workflow.id,
+      workflowRunId: workflowRun.id,
+      goal,
+      workspaceId,
+      initiativeId: args.initiativeId,
+      persona: workflow.persona,
+      fixtureSetId: workflow.fixtureSetId,
+      sessionLineage: args.sessionLineage
+    })
+  } else if (workflow.id === 'sdr.inbound_triage') {
+    rawResult = await handleLiveInboundTriageWorkflow({
+      daemon: args.daemon,
+      cwd: args.cwd,
+      workflowId: workflow.id,
+      workflowRunId: workflowRun.id,
+      goal,
+      workspaceId,
+      initiativeId: args.initiativeId,
+      persona: workflow.persona,
+      fixtureSetId: workflow.fixtureSetId,
+      sessionLineage: args.sessionLineage
+    })
+  } else if (workflow.id === 'cs.health_score') {
+    rawResult = await handleLiveHealthScoreWorkflow({
+      daemon: args.daemon,
+      cwd: args.cwd,
+      workflowId: workflow.id,
+      workflowRunId: workflowRun.id,
+      goal,
+      workspaceId,
+      initiativeId: args.initiativeId,
+      persona: workflow.persona,
+      fixtureSetId: workflow.fixtureSetId,
+      sessionLineage: args.sessionLineage
+    })
+  } else if (workflow.id === 'cs.renewal_prep') {
+    rawResult = await handleLiveRenewalPrepWorkflow({
+      daemon: args.daemon,
+      cwd: args.cwd,
+      workflowId: workflow.id,
+      workflowRunId: workflowRun.id,
+      goal,
+      workspaceId,
+      initiativeId: args.initiativeId,
+      persona: workflow.persona,
+      fixtureSetId: workflow.fixtureSetId,
+      sessionLineage: args.sessionLineage
+    })
+  } else if (workflow.id === 'ae.expansion_signal') {
+    rawResult = await handleLiveExpansionSignalWorkflow({
+      daemon: args.daemon,
+      cwd: args.cwd,
+      workflowId: workflow.id,
+      workflowRunId: workflowRun.id,
+      goal,
+      workspaceId,
+      initiativeId: args.initiativeId,
+      persona: workflow.persona,
+      fixtureSetId: workflow.fixtureSetId,
+      sessionLineage: args.sessionLineage
+    })
+  } else if (workflow.id === 'ae.account_brief') {
+    rawResult = await handleLiveAccountBriefWorkflow({
+      daemon: args.daemon,
+      cwd: args.cwd,
+      workflowId: workflow.id,
+      workflowRunId: workflowRun.id,
+      goal,
+      workspaceId,
+      initiativeId: args.initiativeId,
+      persona: workflow.persona,
+      fixtureSetId: workflow.fixtureSetId,
+      sessionLineage: args.sessionLineage
+    })
+  } else if (workflow.id === 'ae.deal_risk_scan') {
+    rawResult = await handleLiveDealRiskWorkflow({
+      daemon: args.daemon,
+      cwd: args.cwd,
+      workflowId: workflow.id,
+      workflowRunId: workflowRun.id,
+      goal,
+      workspaceId,
+      initiativeId: args.initiativeId,
+      persona: workflow.persona,
+      fixtureSetId: workflow.fixtureSetId,
+      sessionLineage: args.sessionLineage
+    })
+  } else if (workflow.id === 'de.usage_analytics') {
+    rawResult = await handleLiveUsageAnalyticsWorkflow({
+      daemon: args.daemon,
+      cwd: args.cwd,
+      workflowId: workflow.id,
+      workflowRunId: workflowRun.id,
+      goal,
+      workspaceId,
+      initiativeId: args.initiativeId,
+      persona: workflow.persona,
+      fixtureSetId: workflow.fixtureSetId,
+      sessionLineage: args.sessionLineage
     })
   } else if (workflow.lane === 'research') {
     rawResult = await handleResearchRun({
       daemon: args.daemon,
+      cwd: args.cwd,
       goal,
       workspaceId,
       initiativeId: args.initiativeId,
@@ -183,6 +308,7 @@ export async function handleWorkflowRun(args: {
   } else {
     rawResult = await handleOpsRun({
       daemon: args.daemon,
+      cwd: args.cwd,
       goal,
       workspaceId,
       initiativeId: args.initiativeId,
@@ -220,6 +346,7 @@ export async function handleWorkflowRun(args: {
       id: finalizedRun.id,
       status: finalizedRun.status
     },
-    ...workflowResult
+    ...workflowResult,
+    lineageUpdate: rawResult?.lineageUpdate
   }
 }

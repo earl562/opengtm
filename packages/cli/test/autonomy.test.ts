@@ -9,11 +9,13 @@ import { handleResearchRun } from '../src/handlers/research.js'
 import { createCliRouter } from '../src/router.js'
 
 describe('cli autonomy modes', () => {
-  it('treats bare `opengtm` as the default entry command', async () => {
+  it('treats bare invocation as the operator dashboard entry command', async () => {
     const router = createCliRouter()
-    const bare = await router([])
-    const explicit = await router(['opengtm'])
-    expect(bare).toEqual(explicit)
+    const result = await router([])
+    expect(result).toMatchObject({
+      kind: 'dashboard',
+      title: 'OpenGTM'
+    })
   })
 
   it('queues research when autonomy is background', async () => {

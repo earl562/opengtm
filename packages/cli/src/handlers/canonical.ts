@@ -8,6 +8,7 @@ import { handleResearchRun } from './research.js'
 
 export async function handleCanonicalCrmRoundtripRun(args: {
   daemon: OpenGtmLocalDaemon
+  cwd?: string
   goal?: string
   workspaceId?: string
   initiativeId?: string
@@ -31,6 +32,7 @@ export async function handleCanonicalCrmRoundtripRun(args: {
 
   const research = await handleResearchRun({
     daemon: args.daemon,
+    cwd: args.cwd,
     goal: `Research lead ${lead.name} (${lead.email}) from CRM event lead.created`,
     workspaceId,
     initiativeId: args.initiativeId,
@@ -81,6 +83,7 @@ export async function handleCanonicalCrmRoundtripRun(args: {
 
   const ops = await handleOpsRun({
     daemon: args.daemon,
+    cwd: args.cwd,
     goal: `Draft outreach for ${lead.name}`,
     workspaceId,
     initiativeId: args.initiativeId,

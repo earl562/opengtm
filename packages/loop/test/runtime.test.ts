@@ -33,9 +33,12 @@ function makeManifest(overrides: Partial<SkillManifest> = {}): SkillManifest {
   }
 }
 
-function createProvider(resolver: (input: OpenGtmGenerateInput) => Promise<OpenGtmGenerateOutput> | OpenGtmGenerateOutput): OpenGtmProvider {
+function createProvider(
+  resolver: (input: OpenGtmGenerateInput) => Promise<OpenGtmGenerateOutput> | OpenGtmGenerateOutput,
+  id = 'test-provider'
+): OpenGtmProvider {
   return {
-    id: 'test-provider',
+    id,
     generate(input) {
       return Promise.resolve(resolver(input))
     }
@@ -105,6 +108,72 @@ describe('loop: integrated runtime', () => {
     expect(prompts[0]).toContain('<connector_guidance>')
     expect(result.steps[0]?.memoryHits).toHaveLength(1)
     expect(result.steps[0]?.disclosedSkills).toEqual(['lead_research'])
+  })
+
+  it('routes phases through specialized providers and records applied system reminders', async () => {
+    const calls: Array<{ providerId: string; prompt: string }> = []
+    const makePhaseProvider = (id: string) => createProvider((input) => {
+      calls.push({ providerId: id, prompt: input.prompt })
+      return {
+        text: id === 'act-provider'
+          ? JSON.stringify({
+              connectorAction: {
+                family: 'docs',
+                action: 'read-connector',
+                target: 'brief.md',
+                payload: { query: 'acme brief' }
+              }
+            })
+          : 'continue',
+        model: `${id}-model`,
+        tokens: { input: input.prompt.length, output: 12 },
+        costUsd: 0
+      }
+    }, id)
+
+    const result = await runGovernedLoop({
+      provider: makePhaseProvider('default-provider'),
+      goal: 'review the Acme brief',
+      limits: { maxSteps: 4 },
+      runtime: {
+        connectors: {
+          bundle: buildMockConnectorBundle()
+        },
+        policy: {
+          workItemId: 'work-safe',
+          workspaceId: 'workspace-safe',
+          lane: 'research'
+        },
+        phaseProviders: {
+          plan: makePhaseProvider('plan-provider'),
+          act: makePhaseProvider('act-provider'),
+          reflect: makePhaseProvider('reflect-provider')
+        }
+      }
+    })
+
+    expect(calls.map((call) => call.providerId)).toEqual([
+      'plan-provider',
+      'default-provider',
+      'act-provider',
+      'reflect-provider'
+    ])
+    expect(result.steps.map((step) => step.providerId)).toEqual([
+      'plan-provider',
+      'default-provider',
+      'act-provider',
+      'reflect-provider'
+    ])
+    expect(result.steps[0]?.providerModel).toBe('plan-provider-model')
+    expect(result.steps[2]?.providerModel).toBe('act-provider-model')
+    expect(result.steps[2]?.appliedReminderIds).toEqual(expect.arrayContaining([
+      'grounded-evidence',
+      'act-one-connector',
+      'approval-discipline'
+    ]))
+    expect(calls[2]?.prompt).toContain('<system_reminders>')
+    expect(calls[2]?.prompt).toContain('emit exactly one connectorAction JSON object')
+    expect(calls[3]?.prompt).toContain('traceable outcomes')
   })
 
   it('executes connector actions from provider output during the act phase', async () => {
@@ -343,6 +412,75 @@ describe('loop: integrated runtime', () => {
       'connector-guidance'
     ]))
     expect(result.steps[0]?.budgetState).toBe('flush')
+  })
+
+  it('injects budget and custom reminders when context pressure rises', async () => {
+    const prompts: string[] = []
+    const workingContext = createWorkingContext()
+    workingContext.set('account', 'Acme Corp with a very large internal context block that should be trimmed')
+
+    const storage = createStorage({ rootDir: mkdtempSync(join(tmpdir(), 'opengtm-loop-reminders-')) })
+    const memory = createMemoryManager({ storage })
+    await memory.write({
+      workspaceId: 'w1',
+      memoryType: 'semantic',
+      scope: 'initiative:budget',
+      content: 'Acme has a long memory snippet about expansion, hiring, product usage, and stakeholder movement.',
+      retrievalHints: ['acme', 'budget', 'expansion']
+    })
+
+    const provider = createProvider((input) => {
+      prompts.push(input.prompt)
+      return {
+        text: 'budgeted',
+        model: 'budget-model',
+        tokens: { input: input.prompt.length, output: 8 },
+        costUsd: 0
+      }
+    }, 'budget-provider')
+
+    const result = await runGovernedLoop({
+      provider,
+      goal: 'research this lead for Acme',
+      limits: { maxSteps: 1 },
+      runtime: {
+        workingContext,
+        memory: {
+          manager: memory,
+          workspaceId: 'w1',
+          scope: 'initiative:budget',
+          autoStoreOutputs: false
+        },
+        skills: {
+          registry: createSkillRegistryV2([makeSkillArtifact(makeManifest())])
+        },
+        connectors: {
+          bundle: buildMockConnectorBundle()
+        },
+        prompt: {
+          systemReminders: ['Surface only the operator-ready delta.']
+        },
+        contextBudget: createContextBudget({
+          maxTokens: 220,
+          warnThreshold: 0.3,
+          flushThreshold: 0.5,
+          estimator: (text) => text.length
+        })
+      }
+    })
+
+    expect(prompts).toHaveLength(1)
+    expect(prompts[0]).toContain('<system_reminders>')
+    expect(prompts[0]).toContain('budget-discipline')
+    expect(prompts[0]).toContain('custom-1')
+    expect(prompts[0]).toContain('Surface only the operator-ready delta.')
+    expect(result.steps[0]?.appliedReminderIds).toEqual(expect.arrayContaining([
+      'grounded-evidence',
+      'smallest-safe-step',
+      'skills-as-guardrails',
+      'budget-discipline',
+      'custom-1'
+    ]))
   })
 
   it('returns a failed result and preserves observability when the provider throws', async () => {

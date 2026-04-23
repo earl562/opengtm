@@ -276,6 +276,12 @@ export async function handleApprovals(args: {
 		storage,
 		"approval_requests",
 	);
+	const approvalContinuationLabel =
+		updatedWorkItem.ownerLane === "ops-automate"
+			? "ops workflow"
+			: updatedWorkItem.ownerLane === "build-integrate"
+				? "build workflow"
+				: "workflow";
 
 	return {
 		action,
@@ -305,8 +311,8 @@ export async function handleApprovals(args: {
 			approvalState: updatedApproval.status,
 			nextAction:
 				action === "approve"
-					? "Approval recorded. The queued build workflow resumed, wrote a continuation artifact, and completed successfully."
-					: "Approval denied. The blocked build trace and work item were cancelled and will not continue.",
+					? `Approval recorded. The queued ${approvalContinuationLabel} resumed, wrote a continuation artifact, and completed successfully.`
+					: `Approval denied. The blocked ${approvalContinuationLabel} trace and work item were cancelled and will not continue.`,
 		},
 	};
 }

@@ -39,12 +39,15 @@ export interface OpenGtmLoopLimits {
 export interface OpenGtmLoopStep {
   phase: OpenGtmLoopPhase
   prompt: string
+  providerId?: string
+  providerModel?: string
   outputText?: string
   costUsd?: number
   promptTokens?: number
   budgetState?: ContextBudgetState
   budgetStatus?: ContextBudgetStatus
   omittedPromptSections?: string[]
+  appliedReminderIds?: string[]
   memoryHits?: MemorySearchHit[]
   disclosedSkills?: string[]
   connectorAction?: OpenGtmLoopConnectorAction
@@ -122,6 +125,25 @@ export interface OpenGtmLoopObservabilityRuntime {
   logger: Pick<JsonlRunLogger, 'log' | 'finalize' | 'logFilePath'>
 }
 
+export interface OpenGtmLoopPhaseProviders {
+  default?: OpenGtmProvider
+  plan?: OpenGtmProvider
+  observe?: OpenGtmProvider
+  act?: OpenGtmProvider
+  reflect?: OpenGtmProvider
+}
+
+export interface OpenGtmLoopPromptSection {
+  key: string
+  content: string
+  required?: boolean
+}
+
+export interface OpenGtmLoopPromptRuntime {
+  sections?: OpenGtmLoopPromptSection[]
+  systemReminders?: string[]
+}
+
 export interface OpenGtmLoopRuntime {
   workingContext?: WorkingContext
   memory?: OpenGtmLoopMemoryRuntime
@@ -129,6 +151,8 @@ export interface OpenGtmLoopRuntime {
   connectors?: OpenGtmLoopConnectorsRuntime
   policy?: OpenGtmLoopPolicyRuntime
   observability?: OpenGtmLoopObservabilityRuntime
+  phaseProviders?: OpenGtmLoopPhaseProviders
+  prompt?: OpenGtmLoopPromptRuntime
   contextBudget?: ContextBudget
   toggles?: Partial<OpenGtmLoopSubsystemToggles>
 }
@@ -203,7 +227,10 @@ export async function runGovernedLoop({
       goal
     })
     let promptContext: Awaited<ReturnType<typeof buildIntegratedPrompt>> | null = null
+    const selectedProvider = resolvePhaseProvider(provider, runtime?.phaseProviders, phase)
     let prompt = `[${phase}] ${goal}`
+    const providerId = selectedProvider.id
+    let providerModel: string | undefined
     let outputText: string | undefined
     let costUsd = 0
     let connectorAction: OpenGtmLoopConnectorAction | null = null
@@ -219,8 +246,13 @@ export async function runGovernedLoop({
         : null
       prompt = promptContext?.prompt ?? prompt
 
-      const output = await provider.generate({ prompt })
+      emitRuntimeEvent(runtime, 'provider.selected', {
+        phase,
+        providerId: selectedProvider.id
+      })
+      const output = await selectedProvider.generate({ prompt })
       outputText = output.text
+      providerModel = output.model
       costUsd = output.costUsd || 0
       totalCostUsd += costUsd
 
@@ -308,12 +340,15 @@ export async function runGovernedLoop({
     const step: OpenGtmLoopStep = {
       phase,
       prompt,
+      providerId,
+      providerModel,
       outputText,
       costUsd,
       promptTokens: promptContext?.promptTokens,
       budgetState: promptContext?.budgetStatus?.state,
       budgetStatus: promptContext?.budgetStatus,
       omittedPromptSections: promptContext?.omittedSections,
+      appliedReminderIds: promptContext?.appliedReminderIds,
       memoryHits: promptContext?.memoryHits,
       disclosedSkills: promptContext?.disclosedSkills,
       connectorAction: connectorAction ?? undefined,
@@ -487,6 +522,14 @@ function formatActionSummary(action: OpenGtmLoopConnectorAction): string {
   return `${action.action} ${action.family}:${action.target}`
 }
 
+function resolvePhaseProvider(
+  provider: OpenGtmProvider,
+  phaseProviders: OpenGtmLoopPhaseProviders | undefined,
+  phase: OpenGtmLoopPhase
+): OpenGtmProvider {
+  return phaseProviders?.[phase] ?? phaseProviders?.default ?? provider
+}
+
 async function buildIntegratedPrompt({
   goal,
   phase,
@@ -500,6 +543,7 @@ async function buildIntegratedPrompt({
   promptTokens: number
   budgetStatus?: ContextBudgetStatus
   omittedSections: string[]
+  appliedReminderIds: string[]
   memoryHits: MemorySearchHit[]
   disclosedSkills: string[]
 }> {
@@ -519,19 +563,44 @@ async function buildIntegratedPrompt({
     ...runtime.skills.query
   }) ?? []
   const disclosedSkills = skillMatches.map((match) => match.skillId)
+  const goalSection = [
+    `[${phase}] ${goal}`,
+    'Use the externalized runtime context below. Stay grounded in retrieved memory and disclosed skills.',
+    phase === 'act'
+      ? 'If you need a connector action, respond with JSON: {"connectorAction":{"family":"crm","action":"call-api","target":"accounts/123","payload":{}},"response":"optional summary"}'
+      : 'Respond with concise reasoning for this phase.'
+  ].join('\n')
+  const preflightSections = [
+    goalSection,
+    workingContextSection,
+    formatMemoryHits(memoryHits),
+    formatSkillDisclosures(runtime.skills?.registry, disclosedSkills, runtime.skills?.disclosure ?? 'details'),
+    formatConnectorGuidance(runtime.connectors?.bundle ?? [])
+  ].filter(Boolean)
+  const preflightBudgetStatus = runtime.contextBudget?.check(preflightSections.join('\n\n'))
+  const reminders = buildSystemReminders({
+    phase,
+    runtime,
+    budgetStatus: preflightBudgetStatus,
+    disclosedSkills
+  })
 
   const sections = [
     {
       key: 'goal',
       required: true,
-      content: [
-        `[${phase}] ${goal}`,
-        'Use the externalized runtime context below. Stay grounded in retrieved memory and disclosed skills.',
-        phase === 'act'
-          ? 'If you need a connector action, respond with JSON: {"connectorAction":{"family":"crm","action":"call-api","target":"accounts/123","payload":{}},"response":"optional summary"}'
-          : 'Respond with concise reasoning for this phase.'
-      ].join('\n')
+      content: goalSection
     },
+    {
+      key: 'system-reminders',
+      required: true,
+      content: formatSystemReminders(reminders)
+    },
+    ...(runtime.prompt?.sections ?? []).map((section) => ({
+      key: section.key,
+      required: Boolean(section.required),
+      content: section.content
+    })),
     {
       key: 'working-context',
       required: false,
@@ -560,9 +629,86 @@ async function buildIntegratedPrompt({
     promptTokens: runtime.contextBudget?.estimate(built.prompt) ?? 0,
     budgetStatus: built.budgetStatus,
     omittedSections: built.omittedSections,
+    appliedReminderIds: reminders.map((reminder) => reminder.id),
     memoryHits,
     disclosedSkills
   }
+}
+
+function buildSystemReminders(args: {
+  phase: OpenGtmLoopPhase
+  runtime: OpenGtmLoopRuntime
+  budgetStatus?: ContextBudgetStatus
+  disclosedSkills: string[]
+}) {
+  const reminders: Array<{ id: string; content: string }> = [
+    {
+      id: 'grounded-evidence',
+      content: 'Ground every claim in visible harness context. If evidence is missing, say what is missing instead of inventing details.'
+    }
+  ]
+
+  if (args.phase === 'plan' || args.phase === 'observe') {
+    reminders.push({
+      id: 'smallest-safe-step',
+      content: 'Prefer the smallest traceable next step that advances the goal without assuming side effects.'
+    })
+  }
+
+  if (args.phase === 'act') {
+    reminders.push({
+      id: 'act-one-connector',
+      content: 'When action is required, emit exactly one connectorAction JSON object and keep the family/action/target precise.'
+    })
+
+    if (args.runtime.policy) {
+      reminders.push({
+        id: 'approval-discipline',
+        content: 'Treat write-like or side-effectful connector actions as approval-gated; prefer safe reads unless mutation is explicitly necessary.'
+      })
+    }
+  }
+
+  if (args.phase === 'reflect') {
+    reminders.push({
+      id: 'traceable-handoff',
+      content: 'Reflect using traceable outcomes, blockers, and the next grounded handoff rather than generic summary text.'
+    })
+  }
+
+  if (args.disclosedSkills.length > 0) {
+    reminders.push({
+      id: 'skills-as-guardrails',
+      content: 'Use disclosed skills as guardrails and validation checklists, not as substitutes for missing evidence.'
+    })
+  }
+
+  if (args.budgetStatus && args.budgetStatus.state !== 'ok') {
+    reminders.push({
+      id: 'budget-discipline',
+      content: `Context pressure is ${args.budgetStatus.state}; prioritize the highest-value evidence and keep the response compact.`
+    })
+  }
+
+  for (const [index, reminder] of (args.runtime.prompt?.systemReminders ?? []).entries()) {
+    if (!reminder.trim()) continue
+    reminders.push({
+      id: `custom-${index + 1}`,
+      content: reminder.trim()
+    })
+  }
+
+  return reminders
+}
+
+function formatSystemReminders(reminders: Array<{ id: string; content: string }>): string {
+  if (reminders.length === 0) return ''
+
+  return [
+    '<system_reminders>',
+    ...reminders.map((reminder) => `- ${reminder.id}: ${reminder.content}`),
+    '</system_reminders>'
+  ].join('\n')
 }
 
 function applyContextBudget(

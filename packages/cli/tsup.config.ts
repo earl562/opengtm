@@ -10,6 +10,7 @@ export default defineConfig({
   dts: true,
   splitting: false,
   bundle: true,
+  external: ['typescript'],
   // Bundle internal workspaces so the CLI can run without TS-at-runtime.
   noExternal: [/^@opengtm\//],
   // Ensure node:sqlite stays node:sqlite (esbuild may drop the node: prefix).

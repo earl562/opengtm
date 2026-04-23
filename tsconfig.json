@@ -39,7 +39,8 @@
       "@opengtm/executors": ["./packages/executors/src/index.ts"],
       "@opengtm/daemon": ["./packages/daemon/src/index.ts"],
       "@opengtm/evals": ["./packages/evals/src/index.ts"],
-      "@opengtm/cli": ["./packages/cli/src/index.ts"]
+      "@opengtm/cli": ["./packages/cli/src/index.ts"],
+      "opengtm": ["./packages/cli/src/index.ts"]
     }
   },
   "include": [

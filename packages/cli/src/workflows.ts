@@ -29,7 +29,7 @@ const REFERENCE_WORKFLOWS: OpenGtmWorkflowManifest[] = [
     connectorFamilies: ['crm', 'comms'],
     artifactKinds: ['campaign-brief', 'trace'],
     requiresApproval: false,
-    supportTier: 'reference-only',
+    supportTier: 'live',
     isCanonical: false
   },
   {
@@ -71,7 +71,7 @@ const REFERENCE_WORKFLOWS: OpenGtmWorkflowManifest[] = [
     connectorFamilies: ['email', 'crm', 'comms'],
     artifactKinds: ['approval', 'campaign-brief'],
     requiresApproval: true,
-    supportTier: 'reference-only',
+    supportTier: 'live',
     isCanonical: false
   },
   {
@@ -85,7 +85,7 @@ const REFERENCE_WORKFLOWS: OpenGtmWorkflowManifest[] = [
     connectorFamilies: ['crm', 'warehouse', 'meeting_intelligence'],
     artifactKinds: ['analysis', 'trace'],
     requiresApproval: false,
-    supportTier: 'reference-only',
+    supportTier: 'live',
     isCanonical: false
   },
   {
@@ -99,7 +99,7 @@ const REFERENCE_WORKFLOWS: OpenGtmWorkflowManifest[] = [
     connectorFamilies: ['crm', 'meeting_intelligence'],
     artifactKinds: ['analysis', 'trace'],
     requiresApproval: false,
-    supportTier: 'reference-only',
+    supportTier: 'live',
     isCanonical: false
   },
   {
@@ -113,7 +113,7 @@ const REFERENCE_WORKFLOWS: OpenGtmWorkflowManifest[] = [
     connectorFamilies: ['warehouse', 'web_research'],
     artifactKinds: ['analysis', 'trace'],
     requiresApproval: false,
-    supportTier: 'reference-only',
+    supportTier: 'live',
     isCanonical: false
   },
   {
@@ -127,7 +127,7 @@ const REFERENCE_WORKFLOWS: OpenGtmWorkflowManifest[] = [
     connectorFamilies: ['crm', 'support', 'warehouse'],
     artifactKinds: ['analysis', 'trace'],
     requiresApproval: false,
-    supportTier: 'reference-only',
+    supportTier: 'live',
     isCanonical: false
   },
   {
@@ -141,7 +141,7 @@ const REFERENCE_WORKFLOWS: OpenGtmWorkflowManifest[] = [
     connectorFamilies: ['warehouse', 'support'],
     artifactKinds: ['analysis', 'trace'],
     requiresApproval: false,
-    supportTier: 'reference-only',
+    supportTier: 'live',
     isCanonical: false
   },
   {
@@ -155,7 +155,7 @@ const REFERENCE_WORKFLOWS: OpenGtmWorkflowManifest[] = [
     connectorFamilies: ['warehouse'],
     artifactKinds: ['analysis', 'trace'],
     requiresApproval: false,
-    supportTier: 'reference-only',
+    supportTier: 'live',
     isCanonical: false
   }
 ]

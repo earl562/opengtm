@@ -22,12 +22,23 @@ describe('cli offline demo', () => {
     expect(research.traceId).toBeTypeOf('string')
     expect(research.artifactId).toBeTypeOf('string')
     expect(research.artifactPath).toBeTypeOf('string')
+    expect(research.summary.workflowState).toBe('completed')
+    expect(research.summary.connector?.supportTier).toBe('live')
+    expect(research.summary.connector?.action).toBe('read-connector')
 
     const researchTrace = getRecord<any>(daemon.storage as any, 'run_traces', research.traceId)
     expect(researchTrace).toBeTruthy()
     expect(researchTrace.status).toBe('completed')
     expect(researchTrace.logFilePath).toBe(join(rootDir, 'logs', `run-${research.traceId}.jsonl`))
     expect(existsSync(researchTrace.logFilePath)).toBe(true)
+    expect(researchTrace.observedFacts).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: 'harness-loop',
+          loopStatus: 'stopped'
+        })
+      ])
+    )
 
     const build = await handleBuildRun({
       daemon,

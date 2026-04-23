@@ -1,65 +1,152 @@
 # OpenGTM
 
-OpenGTM is an externalization-driven **agentic harness** for **GTM engineers** and **product engineers**.
+![OpenGTM cover](./cover/assets/gtm-engineer.png)
 
-## Goals
-- Artifact-canonical truth (durable artifacts, not provider chat state)
-- Provenance-preserving memory
-- Lane-aware policy + approvals
-- Connector-family contracts (not a flat tool pool)
+OpenGTM is an externalization-driven **agentic harness for GTM engineering and terminal-native operator work** with workflows, approvals, traces, memory, sandbox posture, skills, agents, primitives, and evals in one installable CLI.
 
-## Quickstart (dev)
+## Why install it
+
+OpenGTM is not a chat wrapper. It is a governed control plane for long-running GTM work and primitive-driven terminal tasks:
+
+- **artifact-first truth** — durable artifacts instead of provider chat state
+- **policy + approvals** — explicit operator control for risky actions
+- **trace replay + recovery** — inspectable runs, approvals, feedback, and rollback previews
+- **skills + agents** — discoverable GTM procedures and typed specialist roles
+- **sandbox posture** — macOS Seatbelt/`sandbox-exec` surfaced as a first-class CLI concern
+- **manual-testable UX** — a regular GitHub user can initialize, inspect, run, approve, replay, and extend the harness
+- **primitive execution surface** — file, shell, web, planning, and interaction primitives are exposed directly for harness-style operation
+
+## Install
+
+### From npm
+
 ```bash
-# Clone + enter the repo (prevents "No workspaces found" errors)
-git clone https://github.com/earl562/opengtm opengtm
+npm install -g opengtm
+opengtm
+```
+
+### From source
+
+```bash
+git clone https://github.com/earl562/opengtm.git
 cd opengtm
 
 npm ci
-npm -w @opengtm/cli run build
-
-# Sanity check: ensure you're running the OpenGTM CLI from this repo
-node packages/cli/bin/opengtm.js --help
-
-npm run typecheck
-npm test
+npm run build
+node packages/cli/bin/opengtm.js
 ```
 
-## Troubleshooting
-- `npm error No workspaces found: --workspace=@opengtm/cli`
-  Cause: you are not in the OpenGTM repo root. Fix: `cd opengtm` (the folder containing `package.json` with `"workspaces": ["packages/*", "test"]`).
-- `ExperimentalWarning: SQLite is an experimental feature`
-  This comes from Node's `node:sqlite` and is non-fatal; tests/builds should still pass.
+## First 5 minutes
 
-## Demo
-See `docs/demo.md`.
+```bash
+opengtm
+# inside the session:
+# /help
+# /exit
 
-## Docs
-- Install: `docs/install.md`
-- Architecture: `docs/architecture.md`
-- Package map: `docs/package-map.md`
-- Workflows: `docs/workflows.md`
-- Connectors: `docs/connectors.md`
-- Evals & debugging: `docs/evals.md`
-- Security: `docs/security.md`
-- Discord: `docs/discord.md`
-- Release: `docs/release.md`
-- CRM MVP spec (clean-room): `docs/crm-mvp-spec.md`
+opengtm init --name="Demo Workspace" --initiative="Q2 Pipeline"
+opengtm
+# inside the session:
+# Research Acme
+# read file packages/cli/src/oauth.ts
+# search handleAuth in packages/cli/src
+# Show approvals
+# Why was this blocked?
 
-## CRM (separate repo)
-- The clean-room CRM app will live in `earl562/opengtm-crm` (will be created later); OpenGTM remains the harness repo.
+opengtm status
+```
 
-## CLI
-This repository will publish an npm CLI named **`opengtm`**.
+## What the CLI exposes
 
-## Current OSS truthfulness contract
-- Canonical claim-bearing scenario: `crm.roundtrip`
-- Canonical workflow: `opengtm run workflow crm.roundtrip "Pat Example"` (**live**, local-first)
-- Additional live workflows on the same substrate: `sdr.lead_research`, `sdr.outreach_compose`
-- Remaining workflow catalog: currently **reference-only** until the CRM roundtrip substrate is reused there
-- Release contradiction audit: `npm run audit:contradictions`
+### Interactive harness
+- `opengtm`
+- `opengtm help`
+- `opengtm session status`
+- `opengtm session transcript`
+- `opengtm session new`
+- natural-language GTM tasks such as `Research Acme` and `Draft outreach for Pat Example`
+- coding-oriented primitive asks such as `read file packages/cli/src/oauth.ts`, `list files in packages/cli/src`, `search handleAuth in packages/cli/src`, and `run npm test`
+- broader vertical intents such as `Check account health for Acme` and `Scan deal risk for Acme`
+- harness queries such as `What do you know about this account?`, `What's pending?`, and `What happened last?`
+- composite asks such as `Research Acme and draft outreach for Acme`
+- slash commands such as `/auth`, `/provider`, `/models`, `/approvals`, `/traces`, `/memory`, `/sandbox`, `/skills`
 
-> Note: there is an unrelated Python project also branded "OpenGTM". This repo is a Node/TypeScript harness and is not affiliated.
+### Operator shell / control plane
+- `opengtm status`
+
+### Workflow execution
+- `opengtm workflow list`
+- `opengtm workflow run <workflow-id> "<goal>"`
+- `opengtm agent harness run "<goal>"`
+- `opengtm approvals list|approve|deny`
+- `opengtm traces list|show|replay|rerun`
+- `opengtm artifacts list`
+- `opengtm memory list`
+- `opengtm tool list|show|search|run`
+
+### Control plane
+- `opengtm auth status|login|logout`
+- `opengtm provider list|use`
+- `opengtm models list|use`
+- `opengtm sandbox status`
+- `opengtm sandbox profile list`
+- `opengtm sandbox explain --profile read-only`
+- `opengtm sandbox run --preview --profile read-only -- /bin/echo sandbox-ok`
+
+### Extension surface
+- `opengtm skill list|show|new`
+- `opengtm agent list|show|new`
+- `opengtm agent job list|create|update`
+- `opengtm agent harness run "Research Acme and draft safe follow-up"`
+- `opengtm learn review`
+
+## Current truthfulness contract
+
+- **Canonical live workflow:** `crm.roundtrip`
+- **Additional live workflows:** `sdr.lead_research`, `sdr.outreach_compose`, `cs.health_score`, `cs.renewal_prep`, `ae.expansion_signal`, `ae.account_brief`, `ae.deal_risk_scan`
+- **Remaining workflow catalog:** `reference-only`
+- **Sandbox runtime:** macOS Seatbelt via `sandbox-exec` when available
+- **OpenAI auth path:** PKCE OAuth for the built-in OpenAI provider; API keys remain supported for custom OpenAI-compatible endpoints
+
+> OpenGTM now supports a PKCE OAuth flow for the built-in OpenAI provider and keeps API-key auth for custom OpenAI-compatible endpoints.
+>
+> The built-in OpenAI model menu is a **curated default catalog**. Operators can still switch to a custom model id if the upstream catalog changes before the docs are refreshed.
+>
+> When a provider is configured for a workspace, OpenGTM now uses that provider in research and draft-generation paths instead of only emitting deterministic local scaffolding.
+
+## Walkthrough
+
+Use the full manual test flow here:
+
+- [Install](docs/install.md)
+- [Walkthrough](docs/walkthrough.md)
+- [Demo](docs/demo.md)
+- [Workflows](docs/workflows.md)
+- [Evals & debugging](docs/evals.md)
+- [Security](docs/security.md)
+- [Release](docs/release.md)
+
+## Repo layout
+
+- `packages/cli` — operator-facing CLI, rendering, routing, control plane
+- `packages/core` — domain entities and state transitions
+- `packages/storage` — durable runtime store + artifacts
+- `packages/providers` — model provider contracts/adapters
+- `packages/skills` — GTM skill catalog + registry logic
+- `packages/protocol` — typed user/tool/subagent envelopes
+- `packages/evals` — smoke/benchmark/eval surfaces
+
+## Verification
+
+```bash
+npm run typecheck
+npm test
+npm run build
+npm run pack:check
+```
 
 ## Community
+
 - Questions: GitHub Discussions
-- Security: see `SECURITY.md`
+- Security: see [SECURITY.md](SECURITY.md)
+- Contributing: see [CONTRIBUTING.md](CONTRIBUTING.md)

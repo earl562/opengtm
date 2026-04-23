@@ -1,9 +1,9 @@
 {
-  "name": "@opengtm/cli",
+  "name": "opengtm",
   "version": "0.1.0",
   "type": "module",
   "bin": {
-    "opengtm": "./bin/opengtm.js"
+    "opengtm": "bin/opengtm.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,27 +15,20 @@
   },
   "files": [
     "dist/**",
-    "bin/**"
+    "bin/**",
+    "assets/**"
   ],
-  "dependencies": {
-    "@opengtm/types": "0.1.0",
-    "@opengtm/core": "0.1.0",
-    "@opengtm/observability": "0.1.0",
-    "@opengtm/storage": "0.1.0",
-    "@opengtm/policy": "0.1.0",
-    "@opengtm/daemon": "0.1.0",
-    "@opengtm/evals": "0.1.0"
-  },
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepack": "npm run build"
   },
   "private": false,
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/earl562/opengtm.git"
+    "url": "git+https://github.com/earl562/opengtm.git"
   },
   "homepage": "https://github.com/earl562/opengtm",
   "bugs": {
@@ -43,5 +36,13 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "ink": "^7.0.1",
+    "react": "^19.2.5",
+    "typescript": "^5.7.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14"
   }
 }

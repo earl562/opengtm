@@ -16,6 +16,7 @@ import type {
   OpenGtmFieldOwnership,
   OpenGtmRiskLevel,
   OpenGtmWorkItemStatus,
+  OpenGtmAgentJobStatus,
   OpenGtmApprovalStatus,
   OpenGtmInboxItemStatus,
   OpenGtmInboxItemKind,
@@ -72,6 +73,167 @@ export interface OpenGtmWorkItemInput {
   sourceIds?: string[]
   connectorTargets?: string[]
   createdAt?: string | Date
+}
+
+// === Agent Job ===
+export interface OpenGtmAgentJobError {
+  code: string
+  message: string
+}
+
+export interface OpenGtmAgentJob extends OpenGtmEntityBase {
+  workspaceId: string
+  initiativeId: string
+  workItemId: string | null
+  traceId: string | null
+  parentJobId: string | null
+  dependsOnJobIds: string[]
+  lane: OpenGtmLane
+  agentType: string
+  goal: string
+  status: OpenGtmAgentJobStatus
+  progress: number | null
+  summary: string | null
+  constraints: string[]
+  requiredOutputs: string[]
+  sourceIds: string[]
+  artifactIds: string[]
+  approvalRequestId: string | null
+  output: unknown | null
+  error: OpenGtmAgentJobError | null
+  metadata: OpenGtmUnknownMap
+  startedAt: string | null
+  updatedAt: string
+  endedAt: string | null
+}
+
+export interface OpenGtmAgentJobInput {
+  id?: string
+  workspaceId: string
+  initiativeId: string
+  workItemId?: string | null
+  traceId?: string | null
+  parentJobId?: string | null
+  dependsOnJobIds?: string[]
+  lane: string
+  agentType: string
+  goal: string
+  status?: string
+  progress?: number | null
+  summary?: string | null
+  constraints?: string[]
+  requiredOutputs?: string[]
+  sourceIds?: string[]
+  artifactIds?: string[]
+  approvalRequestId?: string | null
+  output?: unknown | null
+  error?: OpenGtmAgentJobError | null
+  metadata?: OpenGtmUnknownMap
+  startedAt?: string | Date | null
+  updatedAt?: string | Date
+  endedAt?: string | Date | null
+  createdAt?: string | Date
+}
+
+export interface OpenGtmAgentJobUpdateInput {
+  status?: string
+  progress?: number | null
+  summary?: string | null
+  sourceIds?: string[]
+  artifactIds?: string[]
+  approvalRequestId?: string | null
+  output?: unknown | null
+  error?: OpenGtmAgentJobError | null
+  metadata?: OpenGtmUnknownMap
+  traceId?: string | null
+  updatedAt?: string | Date
+  endedAt?: string | Date | null
+}
+
+// === GTM Agentic Harness ===
+export type OpenGtmAgenticHarnessMotion =
+  | 'inbound-lead'
+  | 'outbound-research'
+  | 'account-intelligence'
+
+export interface OpenGtmAgenticHarnessContextPolicy {
+  persistence: 'artifact-backed'
+  compression: 'observation-summary'
+  maxEvidenceItems: number
+}
+
+export interface OpenGtmAgenticHarnessPrinciple {
+  id: string
+  label: string
+  source: string
+  implementation: string
+}
+
+export interface OpenGtmAgenticHarnessStage {
+  id: string
+  label: string
+  lane: OpenGtmLane
+  agentType: string
+  goal: string
+  dependsOnStageIds: string[]
+  connectorFamilies: OpenGtmConnectorFamily[]
+  requiredOutputs: string[]
+  approvalRequired: boolean
+  contextPolicy: OpenGtmAgenticHarnessContextPolicy
+}
+
+export interface OpenGtmAgenticHarnessSafety {
+  humanApprovalRequired: boolean
+  doNotSendChecks: string[]
+  approvalRequiredActions: string[]
+}
+
+export interface OpenGtmAgenticHarnessPlan extends OpenGtmEntityBase {
+  workspaceId: string
+  initiativeId: string
+  workItemId: string | null
+  goal: string
+  targetEntity: string
+  motion: OpenGtmAgenticHarnessMotion
+  status: OpenGtmAgentJobStatus
+  stages: OpenGtmAgenticHarnessStage[]
+  safety: OpenGtmAgenticHarnessSafety
+  principles: OpenGtmAgenticHarnessPrinciple[]
+}
+
+export interface OpenGtmAgenticHarnessPlanInput {
+  id?: string
+  workspaceId: string
+  initiativeId: string
+  workItemId?: string | null
+  goal: string
+  targetEntity?: string
+  motion?: OpenGtmAgenticHarnessMotion
+  createdAt?: string | Date
+}
+
+export interface OpenGtmAgenticHarnessJobSet {
+  plan: OpenGtmAgenticHarnessPlan
+  coordinatorJob: OpenGtmAgentJob
+  stageJobs: OpenGtmAgentJob[]
+  jobs: OpenGtmAgentJob[]
+}
+
+export interface OpenGtmAgenticHarnessStageResult {
+  stageId: string
+  jobId: string
+  status: OpenGtmAgentJobStatus
+  summary: string
+  output: OpenGtmUnknownMap
+}
+
+export interface OpenGtmAgenticHarnessExecution {
+  planId: string
+  status: OpenGtmAgentJobStatus
+  summary: string
+  jobs: OpenGtmAgentJob[]
+  stageResults: OpenGtmAgenticHarnessStageResult[]
+  actionRequests: OpenGtmUnknownMap[]
 }
 
 // === Artifact ===
@@ -473,6 +635,26 @@ export interface OpenGtmContactInput {
   createdAt?: string | Date
 }
 
+export interface OpenGtmOpportunity extends OpenGtmEntityBase {
+  workspaceId: string
+  accountId: string
+  name: string
+  amountCents: number | null
+  stage: string
+  metadata: OpenGtmUnknownMap
+}
+
+export interface OpenGtmOpportunityInput {
+  id?: string
+  workspaceId: string
+  accountId: string
+  name: string
+  amountCents?: number | null
+  stage?: string
+  metadata?: OpenGtmUnknownMap
+  createdAt?: string | Date
+}
+
 // === Journey ===
 export interface OpenGtmJourney extends OpenGtmEntityBase {
   workspaceId: string
@@ -620,6 +802,7 @@ export interface OpenGtmWorkflowRunResult {
   approvalRequestId?: string | null
   artifactId?: string | null
   artifactPath?: string | null
+  memoryId?: string | null
   nextAction: string
 }
 

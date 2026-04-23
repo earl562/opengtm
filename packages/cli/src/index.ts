@@ -1,19 +1,38 @@
 export * from './parse.js'
 export * from './autonomy.js'
 export * from './config.js'
+export * from './catalog.js'
+export * from './credentials.js'
+export * from './provider-runtime.js'
 export * from './router.js'
+export * from './interactive.js'
+export * from './session-intents.js'
+export * from './session-queries.js'
+export * from './session-supervisor.js'
 export * from './render/index.js'
 export * from './reporting.js'
 export * from './recovery.js'
+export * from './handlers/help.js'
+export * from './handlers/status.js'
+export * from './handlers/session.js'
 export * from './handlers/init.js'
 export * from './handlers/research.js'
 export * from './handlers/build.js'
+export * from './handlers/code.js'
 export * from './handlers/approvals.js'
 export * from './handlers/evals.js'
 export * from './handlers/feedback.js'
 export * from './handlers/daemon.js'
 export * from './handlers/ops.js'
+export * from './handlers/auth.js'
+export * from './handlers/providers.js'
+export * from './handlers/models.js'
+export * from './handlers/sandbox.js'
+export * from './handlers/skills.js'
+export * from './handlers/agents.js'
+export * from './handlers/learn.js'
 export * from './handlers/traces.js'
+export * from './handlers/tools.js'
 export * from './handlers/workflows.js'
 export * from './handlers/artifacts.js'
 export * from './handlers/memory.js'
@@ -23,6 +42,21 @@ export * from './workflows.js'
 
 export async function runOpenGtmCli(args: string[]) {
   const parsed = await import('./parse.js').then((m) => m.parseCliArgs(args))
+  const interactive = await import('./interactive.js')
+  if (interactive.shouldLaunchInteractiveHarness(args, {
+    stdin: process.stdin,
+    stdout: process.stdout
+  })) {
+    try {
+      await interactive.runInteractiveHarnessSession({
+        cwd: process.cwd()
+      })
+      return 0
+    } catch (error) {
+      console.error(String(error))
+      return 1
+    }
+  }
   const router = await import('./router.js').then((m) => m.createCliRouter())
   const renderCliOutput = await import('./render/index.js').then((m) => m.renderCliOutput)
   try {

@@ -41,6 +41,7 @@ export function updateRunTrace(
     | 'debugBundlePath'
     | 'artifactIds'
     | 'feedbackEventIds'
+    | 'policyDecisionIds'
     | 'connectorCalls'
     | 'observedFacts'
   >>
