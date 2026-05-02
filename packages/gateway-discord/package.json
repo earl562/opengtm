@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@opengtm/gateways": "file:../gateways",
-    "discord.js": "^14.22.1"
+    "discord.js": "^14.26.4"
   },
   "scripts": {
     "test": "vitest run",
